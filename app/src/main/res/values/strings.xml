@@ -3,4 +3,7 @@
     <string name="child_name">Введи своё имя</string>
     <string name="title">Приветосик!</string>
     <string name="enter_button">Зайти</string>
+    <string name="edit_homework">Что задали?</string>
+    <string name="addHW_button">Записать</string>
+
 </resources>
