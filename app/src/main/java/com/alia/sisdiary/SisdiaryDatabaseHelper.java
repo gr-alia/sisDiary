@@ -30,6 +30,7 @@ public class SisdiaryDatabaseHelper extends SQLiteOpenHelper {
         insertSubject(db, "Укр. мова", "ПН","домашка");
         insertSubject(db, "Біологія", "ПН", "домашка");
         insertSubject(db, "Біологія", "ПН", "домашка");
+
     }
 
     @Override
