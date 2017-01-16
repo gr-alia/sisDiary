@@ -1,5 +1,6 @@
 package com.alia.sisdiary;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -14,7 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class HomeWorkActivity extends AppCompatActivity {
-public static final String EXTRA_SUBJECTNO = "subjectNo";
+    public static final String EXTRA_SUBJECTNO = "subjectNo";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,11 +28,11 @@ public static final String EXTRA_SUBJECTNO = "subjectNo";
         try {
             SQLiteOpenHelper sisdiaryDatabaseHelper = new SisdiaryDatabaseHelper(this);
             SQLiteDatabase db = sisdiaryDatabaseHelper.getReadableDatabase();
-            Cursor cursor = db.query ("SUBJECT",
-                    new String[] {"NAME", "HOMEWORK"},
+            Cursor cursor = db.query("SUBJECT",
+                    new String[]{"NAME", "HOMEWORK"},
                     "_id = ?",
-                    new String[] {Integer.toString(subjectNO)},
-                    null, null,null);
+                    new String[]{Integer.toString(subjectNO)},
+                    null, null, null);
             //move to row
             if (cursor.moveToFirst()) {
                 //get values of row from Cursor
@@ -41,23 +43,58 @@ public static final String EXTRA_SUBJECTNO = "subjectNo";
                 TextView subjectName = (TextView) findViewById(R.id.subject_name);
                 subjectName.setText(subjectNameText);
                 //fill in subject homework
-                TextView homework = (TextView)findViewById(R.id.homeWork);
+                TextView homework = (TextView) findViewById(R.id.homeWork);
                 homework.setText(homeworkText);
             }
             cursor.close();
             db.close();
-        } catch(SQLiteException e) {
+        } catch (SQLiteException e) {
             Toast toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT);
             toast.show();
         }
 
     }
-    public void onAddHomeWork(View view){
-        //TODO- write data in DB here
 
-        EditText homeWorkEdit = (EditText)findViewById(R.id.editHomeWork);
-        String  homeWorkText =  homeWorkEdit.getText().toString();
-        TextView homeWorkView = (TextView) findViewById(R.id.homeWork);
-        homeWorkView.setText(homeWorkText);
+    public void onAddHomeWork(View view) {
+
+        int subjectNO = (Integer) getIntent().getExtras().get(EXTRA_SUBJECTNO);
+
+        EditText homeWorkEdit = (EditText) findViewById(R.id.editHomeWork);
+        ContentValues homeworkValues = new ContentValues();
+        homeworkValues.put("HOMEWORK", homeWorkEdit.getText().toString());
+
+
+        SQLiteOpenHelper sisdiaryDatabaseHelper = new SisdiaryDatabaseHelper(this);
+        try {
+            //write data in DB here
+            SQLiteDatabase db = sisdiaryDatabaseHelper.getWritableDatabase();
+            db.update("SUBJECT",
+                    homeworkValues,
+                    "_id=?",
+                    new String[]{Integer.toString(subjectNO)});
+            //read data from DB here
+            Cursor cursor = db.query("SUBJECT",
+                    new String[]{"HOMEWORK"},
+                    "_id = ?",
+                    new String[]{Integer.toString(subjectNO)},
+                    null, null, null);
+            //move to row
+            if (cursor.moveToFirst()) {
+                //get values of row from Cursor
+                String homeworkText = cursor.getString(0);
+
+                //fill in subject homework
+                TextView homework = (TextView) findViewById(R.id.homeWork);
+                homework.setText(homeworkText);
+            }
+            cursor.close();
+            db.close();
+        } catch (SQLiteException e) {
+            Toast toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+
+
+
     }
 }
