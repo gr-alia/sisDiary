@@ -4,45 +4,60 @@
     android:id="@+id/activity_home_work"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
     tools:context="com.alia.sisdiary.HomeWorkActivity">
 
     <TextView
-        android:text=""
+        android:id="@+id/subject_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/subject_name"
         android:layout_gravity="center_horizontal"
+        android:text=""
+        android:textColor="@android:color/black"
         android:textSize="24sp"
-        android:textStyle="normal|bold"
-        android:textColor="@android:color/black" />
+        android:textStyle="normal|bold" />
 
     <EditText
+        android:id="@+id/editHomeWork"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="@string/edit_homework"
         android:ems="50"
-        android:id="@+id/editHomeWork" />
+        android:inputType="textPersonName"
+        android:text="@string/edit_homework" />
 
-    <Button
-        android:text="@string/addHW_button"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/addHomeWork"
-        android:onClick="onAddHomeWork"/>
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/addHomeWork"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onAddHomeWork"
+            android:text="@string/addHW_button" />
+
+        <Button
+            android:id="@+id/deleteHomeWork"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onDeleteHomeWork"
+            android:text="@string/deleteHW_button" />
+    </LinearLayout>
 
     <TextView
-        android:text=""
+        android:id="@+id/homeWork"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/homeWork"
         android:layout_marginTop="40dp"
+        android:text=""
         android:textColor="@color/colorPrimaryDark"
-        android:textStyle="italic"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:textStyle="italic" />
 </LinearLayout>

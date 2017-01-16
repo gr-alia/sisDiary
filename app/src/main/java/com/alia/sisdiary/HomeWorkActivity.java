@@ -56,17 +56,22 @@ public class HomeWorkActivity extends AppCompatActivity {
     }
 
     public void onAddHomeWork(View view) {
-
-        int subjectNO = (Integer) getIntent().getExtras().get(EXTRA_SUBJECTNO);
-
         EditText homeWorkEdit = (EditText) findViewById(R.id.editHomeWork);
         ContentValues homeworkValues = new ContentValues();
         homeworkValues.put("HOMEWORK", homeWorkEdit.getText().toString());
+        updateHomeWork(homeworkValues);
+    }
 
-
+    public void onDeleteHomeWork(View view) {
+        ContentValues homeworkValues = new ContentValues();
+        homeworkValues.put("HOMEWORK", "   ");
+        updateHomeWork(homeworkValues);
+    }
+    private void updateHomeWork(ContentValues homeworkValues){
+        int subjectNO = (Integer) getIntent().getExtras().get(EXTRA_SUBJECTNO);
         SQLiteOpenHelper sisdiaryDatabaseHelper = new SisdiaryDatabaseHelper(this);
         try {
-            //write data in DB here
+            //clear current homework in DB here
             SQLiteDatabase db = sisdiaryDatabaseHelper.getWritableDatabase();
             db.update("SUBJECT",
                     homeworkValues,
@@ -93,8 +98,5 @@ public class HomeWorkActivity extends AppCompatActivity {
             Toast toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT);
             toast.show();
         }
-
-
-
     }
 }
