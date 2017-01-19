@@ -6,4 +6,5 @@
     <string name="edit_homework">Что задали?</string>
     <string name="addHW_button">Записать</string>
     <string name="deleteHW_button">Стереть</string>
+
 </resources>

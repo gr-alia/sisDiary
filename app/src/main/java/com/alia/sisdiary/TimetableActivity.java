@@ -8,27 +8,43 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
-public class TimetableActivity extends ListActivity {
+public class TimetableActivity extends AppCompatActivity {
     private SQLiteDatabase db;
     private Cursor cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new CreateTimetableTask().execute();
+        setContentView(R.layout.activity_timetable);
+        //new CreateTimetableTask().execute();
+
+        // Get the ViewPager and set it's PagerAdapter so that it can display items
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(new TimetableFragmentPagerAdapter(getSupportFragmentManager(),TimetableActivity.this));
+
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        //connect TabLayout with ViewPager
+        tabLayout.setupWithViewPager(viewPager);
+
     }
     @Override
     public  void onDestroy(){
         super.onDestroy();
-        cursor.close();
-        db.close();
+       // cursor.close();
+        // db.close();
     }
+    /*
     public void onListItemClick(
             ListView listView,
             View itemView,
@@ -38,8 +54,8 @@ public class TimetableActivity extends ListActivity {
         Intent intent = new Intent(this, HomeWorkActivity.class);
         intent.putExtra(HomeWorkActivity.EXTRA_SUBJECTNO, (int) id);
         startActivity(intent);
-    }
-    private class CreateTimetableTask extends AsyncTask<Void, Void, Boolean>{
+    }*/
+   /* private class CreateTimetableTask extends AsyncTask<Void, Void, Boolean>{
 
         @Override
         protected Boolean doInBackground(Void... voids) {
@@ -73,5 +89,5 @@ public class TimetableActivity extends ListActivity {
                 listView.setAdapter(cursorAdapter);
             }
         }
-    }
+    }*/
 }
