@@ -17,13 +17,13 @@
         android:text="@string/title"
         android:id="@+id/textView"
         android:textColor="#6f19ee"
-        android:textSize="24dp" />
+        android:textSize="24sp" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="@string/child_name"
+        android:hint="@string/child_name"
         android:ems="10"
         android:id="@+id/name"
         android:layout_marginTop="58dp"

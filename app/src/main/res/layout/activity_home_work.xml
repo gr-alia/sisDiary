@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:ems="50"
         android:inputType="textPersonName"
-        android:text="@string/edit_homework" />
+        android:hint="@string/edit_homework" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onAddHomeWork"
-            android:text="@string/addHW_button" />
+            android:text="@string/addHW_button"/>
 
         <Button
             android:id="@+id/deleteHomeWork"
