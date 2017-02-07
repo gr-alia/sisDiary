@@ -5,9 +5,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
- * Created by Alyona on 14.01.2017.
- */
 
 public class SisdiaryDatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "sisdiary";
@@ -30,6 +27,8 @@ public class SisdiaryDatabaseHelper extends SQLiteOpenHelper {
         insertSubject(db, "Укр. мова", "ПН","домашка");
         insertSubject(db, "Біологія", "ПН", "домашка");
         insertSubject(db, "Біологія", "ПН", "домашка");
+        insertSubject(db, "Біологія", "ВТ", "домашка");
+        insertSubject(db, "Англ. мова", "ВТ", "домашка");
 
     }
 
