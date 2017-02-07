@@ -15,7 +15,7 @@ public class TimetableActivity extends AppCompatActivity {
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new TimetableFragmentPagerAdapter(getSupportFragmentManager(),TimetableActivity.this));
+        viewPager.setAdapter(new TimetableFragmentPagerAdapter(getSupportFragmentManager(), TimetableActivity.this));
 
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);

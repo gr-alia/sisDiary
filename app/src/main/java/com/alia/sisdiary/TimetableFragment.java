@@ -52,8 +52,12 @@ public class TimetableFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        String tabTitles[] = new String[]{"ПН", "ВТ", "СР", "ЧТ", "ПТ"};
 
-        new CreateTimetableTask().execute();
+        Bundle args = getArguments();
+        int dayOfWeek = args.getInt(ARG_NUM);
+
+        new CreateTimetableTask().execute(tabTitles[dayOfWeek - 1]);
 
     }
 
@@ -76,17 +80,21 @@ public class TimetableFragment extends ListFragment {
 
     }
 
-    private class CreateTimetableTask extends AsyncTask<Void, Void, Boolean> {
+    private class CreateTimetableTask extends AsyncTask<String, Void, Boolean> {
 
         @Override
-        protected Boolean doInBackground(Void... voids) {
+        protected Boolean doInBackground(String... strings) {
+            String dayOfWeek = strings[0];
             try {
                 SQLiteOpenHelper sisdiaryDatabaseHelper = new SisdiaryDatabaseHelper(getContext());
                 db = sisdiaryDatabaseHelper.getReadableDatabase();
                 cursor = db.query("SUBJECT",
                         new String[]{"_id", "NAME"},
-                        null, null, null, null, null
+                        "DAY=?",
+                        new String[]{dayOfWeek},
+                        null, null, null
                 );
+
                 return true;
             } catch (SQLiteException e) {
                 return false;

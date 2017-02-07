@@ -72,13 +72,16 @@ public class HomeWorkActivity extends AppCompatActivity {
         ContentValues homeworkValues;
         String homeworkText;
         String value;
-        public UpdateHomeWorkTask(String value){
+
+        public UpdateHomeWorkTask(String value) {
             this.value = value;
         }
-        protected void onPreExecute(){
+
+        protected void onPreExecute() {
             homeworkValues = new ContentValues();
             homeworkValues.put("HOMEWORK", value);
         }
+
         protected Boolean doInBackground(Integer... subjects) {
             int subjectNO = subjects[0];
             SQLiteOpenHelper sisdiaryDatabaseHelper = new SisdiaryDatabaseHelper(HomeWorkActivity.this);
@@ -105,16 +108,16 @@ public class HomeWorkActivity extends AppCompatActivity {
                 db.close();
                 return true;
             } catch (SQLiteException e) {
-               return false;
+                return false;
             }
         }
-        protected void onPostExecute(Boolean success){
+
+        protected void onPostExecute(Boolean success) {
             if (!success) {
                 Toast toast = Toast.makeText(HomeWorkActivity.this,
                         "Database unavailable", Toast.LENGTH_SHORT);
                 toast.show();
-            }
-            else {
+            } else {
                 //fill in subject homework
                 TextView homework = (TextView) findViewById(R.id.homeWork);
                 homework.setText(homeworkText);

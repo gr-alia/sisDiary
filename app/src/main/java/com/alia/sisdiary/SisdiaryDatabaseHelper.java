@@ -22,9 +22,9 @@ public class SisdiaryDatabaseHelper extends SQLiteOpenHelper {
                 + "DAY TEXT, "
                 + "HOMEWORK TEXT);");
         insertSubject(db, "Математика", "ПН", "домашка");
-        insertSubject(db, "Фіз-ра", "ПН","домашка");
-        insertSubject(db, "Укр. мова", "ПН","домашка");
-        insertSubject(db, "Укр. мова", "ПН","домашка");
+        insertSubject(db, "Фіз-ра", "ПН", "домашка");
+        insertSubject(db, "Укр. мова", "ПН", "домашка");
+        insertSubject(db, "Укр. мова", "ПН", "домашка");
         insertSubject(db, "Біологія", "ПН", "домашка");
         insertSubject(db, "Біологія", "ПН", "домашка");
         insertSubject(db, "Біологія", "ВТ", "домашка");
@@ -37,7 +37,7 @@ public class SisdiaryDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    private static void insertSubject(SQLiteDatabase db, String name, String day, String homework){
+    private static void insertSubject(SQLiteDatabase db, String name, String day, String homework) {
         ContentValues subjectValues = new ContentValues();
         subjectValues.put("NAME", name);
         subjectValues.put("DAY", day);
