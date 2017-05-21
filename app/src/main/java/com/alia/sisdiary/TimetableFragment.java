@@ -26,6 +26,9 @@ public class TimetableFragment extends ListFragment {
     private SQLiteDatabase db;
     private Cursor cursor;
 
+    public TimetableFragment() {
+    }
+
     public static TimetableFragment newInstance(int num) {
 
         // Supply num input as an argument.

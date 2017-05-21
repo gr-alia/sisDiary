@@ -1,43 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
-    android:gravity="center"
-    tools:context="com.alia.sisdiary.EntranceActivity">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/bckg"
+              android:gravity="center"
+              android:orientation="vertical"
+              android:paddingBottom="@dimen/activity_vertical_margin"
+              android:paddingLeft="@dimen/activity_horizontal_margin"
+              android:paddingRight="@dimen/activity_horizontal_margin"
+              android:paddingTop="@dimen/activity_vertical_margin"
+              tools:context="com.alia.sisdiary.EntranceActivity">
 
     <TextView
+        android:id="@+id/textView"
+        fontPath="fonts/Lato-Thin.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/title"
-        android:id="@+id/textView"
-        android:textColor="#6f19ee"
-        android:textSize="24sp" />
+        android:textColor="@color/colorWhite"
+        android:textSize="24sp"
+        tools:ignore="MissingPrefix"/>
 
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:hint="@string/child_name"
-        android:ems="10"
         android:id="@+id/name"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
         android:layout_marginTop="58dp"
-        android:textColor="#006745" />
+        android:ems="10"
+        android:hint="@string/child_name"
+        android:inputType="textPersonName"
+        android:shadowColor="@color/colorPrimaryDark"
+        android:textColor="#006745"/>
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:ems="10"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:shadowColor="@color/colorPrimaryDark"
+        android:textColor="#006745"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/enter_button"
         android:id="@+id/button"
+        style="@style/EntranceButton"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:onClick="onComeIn"/>
+        android:onClick="onComeIn"
+        android:text="@string/enter_button"
 
-
+        />
 
 
 </LinearLayout>

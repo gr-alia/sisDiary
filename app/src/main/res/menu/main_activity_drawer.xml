@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/one" android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_timetable"
+            android:icon="@drawable/ic_menu_timetable"
+            android:title="@string/menu_title_timetable" />
+
+    </group>
+
+    <group android:id="@+id/two" android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_notes"
+            android:icon="@drawable/ic_menu_notes"
+            android:title="@string/menu_title_notes" />
+
+    </group>
+
+    <group android:id="@+id/three" android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_msgs"
+            android:icon="@drawable/ic_menu_msgs"
+            android:title="@string/menu_title_msgs" />
+    </group>
+    <group android:id="@+id/four" android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_photos"
+            android:icon="@drawable/ic_menu_photos"
+            android:title="@string/menu_title_photos" />
+    </group>
+</menu>

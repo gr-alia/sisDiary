@@ -1,10 +1,16 @@
 <resources>
-    <string name="app_name">SisDiary</string>
-    <string name="child_name">Введи своё имя</string>
-    <string name="title">Приветосик!</string>
-    <string name="enter_button">Зайти</string>
+    <string name="app_name" translatable="false">SisDiary</string>
+    <string name="child_name">Ім\'я</string>
+    <string name="password">Пароль</string>
+    <string name="title">UR sister\'s Diary</string>
+    <string name="enter_button">Заглянути</string>
     <string name="edit_homework">Что задали?</string>
     <string name="addHW_button">Записать</string>
     <string name="deleteHW_button">Стереть</string>
+
+    <string name="menu_title_notes">Записи</string>
+    <string name="menu_title_msgs">Повідомлення</string>
+    <string name="menu_title_timetable">Розклад</string>
+    <string name="menu_title_photos">Фоточки</string>
 
 </resources>
