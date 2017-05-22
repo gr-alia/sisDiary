@@ -17,7 +17,6 @@
         </activity>
         <activity android:name=".MainActivity"
                   android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".TimetableActivity" />
         <activity android:name=".HomeWorkActivity"/>
     </application>
 

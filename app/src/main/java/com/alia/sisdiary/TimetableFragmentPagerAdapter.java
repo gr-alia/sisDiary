@@ -8,11 +8,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 public class TimetableFragmentPagerAdapter extends FragmentPagerAdapter {
     final int PAGE_COUNT = 5;
     private String tabTitles[] = new String[]{"ПН", "ВТ", "СР", "ЧТ", "ПТ"};
-    private Context context;
 
-    public TimetableFragmentPagerAdapter(FragmentManager fm, Context context) {
+
+    public TimetableFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
-        this.context = context;
+
     }
 
     //Return the number of views available.
@@ -22,10 +22,12 @@ public class TimetableFragmentPagerAdapter extends FragmentPagerAdapter {
     }
 
     //Return the Fragment associated with a specified position.
+
     @Override
     public Fragment getItem(int position) {
-        return TimetableFragment.newInstance(position + 1);
+        return DayTimetableFragment.newInstance(position + 1);
     }
+
 
     @Override
     public CharSequence getPageTitle(int position) {
