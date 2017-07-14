@@ -1,9 +1,10 @@
-package com.alia.sisdiary;
+package com.alia.sisdiary.ui.adapter;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.alia.sisdiary.ui.fragment.DayListTimetableFragment;
 
 public class TimetableFragmentPagerAdapter extends FragmentPagerAdapter {
     final int PAGE_COUNT = 5;
@@ -25,7 +26,7 @@ public class TimetableFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return DayTimetableFragment.newInstance(position + 1);
+        return DayListTimetableFragment.newInstance(position + 1);
     }
 
 

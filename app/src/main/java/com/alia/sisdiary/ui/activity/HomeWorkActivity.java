@@ -1,4 +1,4 @@
-package com.alia.sisdiary;
+package com.alia.sisdiary.ui.activity;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -6,15 +6,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
-import android.os.StrictMode;
-import android.support.annotation.StringDef;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.alia.sisdiary.R;
+import com.alia.sisdiary.database.SisdiaryDatabaseHelper;
 
 public class HomeWorkActivity extends AppCompatActivity {
     public static final String EXTRA_SUBJECTNO = "subjectNo";

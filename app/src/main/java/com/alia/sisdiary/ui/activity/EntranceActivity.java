@@ -1,4 +1,4 @@
-package com.alia.sisdiary;
+package com.alia.sisdiary.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +8,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+
+import com.alia.sisdiary.R;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class EntranceActivity extends AppCompatActivity {
@@ -23,8 +25,7 @@ public class EntranceActivity extends AppCompatActivity {
     }
 
     public void onComeIn(View view) {
-        Log.d(TAG, "Launch click ComeIN",
-                new Exception());
+        Log.i(TAG, "Launch click ComeIN");
         EditText nameView = (EditText) findViewById(R.id.name);
         String childName = nameView.getText().toString();
         Intent intent = new Intent(this, MainActivity.class);

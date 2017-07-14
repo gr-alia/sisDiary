@@ -1,4 +1,4 @@
-package com.alia.sisdiary;
+package com.alia.sisdiary.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,7 +10,7 @@ public class SisdiaryDatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "sisdiary";
     private static final int DB_VERSION = 1;
 
-    SisdiaryDatabaseHelper(Context context) {
+    public SisdiaryDatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
 
     }
