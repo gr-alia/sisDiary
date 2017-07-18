@@ -2,10 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content"
+              android:padding="4dp"
+              android:paddingBottom="8dp"
+              android:paddingTop="8dp">
     <TextView
-        android:id="@+id/list_item_subject_title_text_view"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"/>
+        android:id="@+id/list_item_subject_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_weight="1"
+        android:textSize="24sp"
+        android:text=""/>
+    <TextView
+        android:id="@+id/list_item_subject_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="6"
+        android:textSize="24sp"
+        />
 
 </LinearLayout>

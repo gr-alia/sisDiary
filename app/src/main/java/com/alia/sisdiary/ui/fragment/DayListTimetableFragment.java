@@ -1,11 +1,8 @@
 package com.alia.sisdiary.ui.fragment;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.os.AsyncTask;
+import android.app.Activity;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,12 +10,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alia.sisdiary.App;
 import com.alia.sisdiary.R;
-import com.alia.sisdiary.database.SisdiaryDatabaseHelper;
+import com.alia.sisdiary.model.DaoSession;
 import com.alia.sisdiary.model.Subject;
+import com.alia.sisdiary.model.SubjectDao;
+import com.alia.sisdiary.ui.adapter.SubjectAdapter;
+
+import org.greenrobot.greendao.query.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +31,17 @@ public class DayListTimetableFragment extends Fragment {
     public static final String ARG_NUM = "ARG_NUM";
     private static final String TAG = "DayListTimetableFragment";
 
+    private FloatingActionButton mFab;
     private RecyclerView mTimetableRecyclerView;
+    private EditText mNumberEditText;
+    private EditText mNameEditText;
+
     private SubjectAdapter mAdapter;
-    private SQLiteDatabase db;
-    private Cursor cursor;
-    private List<Subject> mArrayList = new ArrayList<>();
+    private List<Subject> mSubjects;
+
+    private SubjectDao mSubjectDao;
+    private Query<Subject> mSubjectQuery;
+
 
     public DayListTimetableFragment() {
     }
@@ -60,15 +69,16 @@ public class DayListTimetableFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_daylist_timetable, container,
                 false);
-        mTimetableRecyclerView = (RecyclerView) view
-                .findViewById(R.id.timetable_recycler_view);
-        mTimetableRecyclerView.setLayoutManager(new LinearLayoutManager
-                (getActivity()));
+        setupViews(view);
+        // get the subject DAO
+        DaoSession daoSession = ((App)getActivity().getApplication()).getDaoSession();
+        mSubjectDao = daoSession.getSubjectDao();
 
-
+        // query all cats, sorted a-z by their name
+        mSubjectQuery = mSubjectDao.queryBuilder().orderAsc(SubjectDao.Properties.Number).build();
+        updateSubjects();
         return view;
     }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -76,87 +86,67 @@ public class DayListTimetableFragment extends Fragment {
 
         Bundle args = getArguments();
         int dayOfWeek = args.getInt(ARG_NUM);
-
-        new CreateTimetableTask().execute(tabTitles[dayOfWeek - 1]);
-
-
-
     }
 
+    private void setupViews(View view) {
+        mTimetableRecyclerView = (RecyclerView) view
+                .findViewById(R.id.timetable_recycler_view);
+        mFab = (FloatingActionButton) view
+                .findViewById(R.id.fab);
+        mNumberEditText = (EditText) view
+                .findViewById(R.id.subject_number_et);
+        mNameEditText = (EditText) view
+                .findViewById(R.id.subject_name_et);
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        cursor.close();
-        db.close();
+        mSubjects = new ArrayList<>();
+        mAdapter = new SubjectAdapter(mSubjects,subjectClickListener);
+        mTimetableRecyclerView.setLayoutManager(new LinearLayoutManager
+                (getActivity()));
+        mTimetableRecyclerView.setAdapter(mAdapter);
 
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addSubject();
+            }
+        });
     }
 
-    private class SubjectHolder extends RecyclerView.ViewHolder {
+    private void addSubject(){
+        String number = mNumberEditText.getText().toString();
+        String name = mNameEditText.getText().toString();
+        mNumberEditText.setText("");
+        mNameEditText.setText("");
+        mNumberEditText.clearFocus();
+        mNameEditText.clearFocus();
 
-        private TextView mTitleTextView;
-        private TextView mIdTextView;
-
-        private Subject mSubject;
-
-        public SubjectHolder(View itemView) {
-            super(itemView);
-            // itemView.setOnClickListener(this);
-            mTitleTextView = (TextView)
-                    itemView.findViewById(R.id.list_item_subject_title_text_view);
-           // mIdTextView = (TextView)
-             //       itemView.findViewById(R.id.list_item_subject_id_text_view);
+        if (name.trim().equals("") || number.trim().equals("")) {
+            Toast.makeText(getActivity(), "Номер або назва не заповнені", Toast.LENGTH_SHORT).show();
+            return;
         }
-
-        public void bindSubject(Subject subject, int position) {
-            mSubject = subject;
-            Log.i(TAG, "bindSubject set this TittleText " + mSubject.getName());
-            mTitleTextView.setText(mSubject.getName());
-            Log.i(TAG, "Adapter bing subject and ViewHolder in position "+ position);
-            // mIdTextView.setText(position);
-        }
-        /*
-        @Override
-        public void onClick(View v) {
-            Log.i(TAG, "Item clicked: " + mSubject.getId());
-
-            Intent intent = new Intent(getActivity(), HomeWorkActivity.class);
-            intent.putExtra(HomeWorkActivity.EXTRA_SUBJECTNO, (int) mSubject.getId());
-            startActivity(intent);
-
-        }
-        */
-
+        Subject subject = new Subject();
+        subject.setNumber(Integer.parseInt(number));
+        subject.setName(name);
+        mSubjectDao.insert(subject);
+        updateSubjects();
     }
-
-    private class SubjectAdapter extends RecyclerView.Adapter<SubjectHolder> {
-        private List<Subject> mSubjects;
-
-        public SubjectAdapter(List<Subject> subjects) {
-            this.mSubjects = subjects;
-            Log.i(TAG, "Create new SubjectAdapter, field mSubjects= " + mSubjects);
-        }
-
-        @Override
-        public SubjectHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            View view = layoutInflater
-                    .inflate(R.layout.list_item_subject, parent, false);
-            return new SubjectHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(SubjectHolder holder, int position) {
-            Subject subject = mSubjects.get(position);
-            holder.bindSubject(subject, position);
-        }
-
-        @Override
-        public int getItemCount() {
-            return mSubjects.size();
-        }
+    public void updateSubjects() {
+        mSubjects = mSubjectQuery.list();   //To load all entities into memory
+        mAdapter.setSubjects(mSubjects);
     }
+    SubjectAdapter.SubjectClickListener subjectClickListener = new SubjectAdapter.SubjectClickListener() {
+        @Override
+        public void onSubjectClick(int position) {
+            Subject subject = mAdapter.getSubject(position);
+            Long subjectId = subject.getId();
 
+            mSubjectDao.deleteByKey(subjectId);
+            Log.i("SubjectDao", "Deleted subject, ID: " + subjectId + " NAME: " + subject.getName());
+            updateSubjects();
+        }
+    };
+
+/*
     private class CreateTimetableTask extends AsyncTask<String, Void, Boolean> {
 
         @Override
@@ -194,16 +184,16 @@ public class DayListTimetableFragment extends Fragment {
                     } while (cursor.moveToNext());
                 }
 
-                /*
-                CursorAdapter cursorAdapter = new SimpleCursorAdapter(
-                        getActivity(),
-                        android.R.layout.simple_list_item_1,
-                        cursor,
-                        new String[]{"NAME"},
-                        new int[]{android.R.id.text1},
-                        0);
-                setListAdapter(cursorAdapter);
-                */
+
+               // CursorAdapter cursorAdapter = new SimpleCursorAdapter(
+               //         getActivity(),
+               //         android.R.layout.simple_list_item_1,
+               //         cursor,
+               //         new String[]{"NAME"},
+               //        new int[]{android.R.id.text1},
+               //         0);
+               //setListAdapter(cursorAdapter);
+
                 Log.i(TAG, "Fill arrayList from cursor "+ mArrayList);
                 mAdapter = new SubjectAdapter(mArrayList);
                 mTimetableRecyclerView.setAdapter(mAdapter);
@@ -211,5 +201,5 @@ public class DayListTimetableFragment extends Fragment {
             Log.i(TAG, "onPostExecute finished");
         }
     }
-
+    */
 }
