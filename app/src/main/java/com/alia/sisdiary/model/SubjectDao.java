@@ -23,8 +23,7 @@ public class SubjectDao extends AbstractDao<Subject, Long> {
      */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Number = new Property(1, Integer.class, "number", false, "NUMBER");
-        public final static Property Name = new Property(2, String.class, "name", false, "NAME");
+        public final static Property Name = new Property(1, String.class, "name", false, "NAME");
     }
 
     private DaoSession daoSession;
@@ -44,8 +43,7 @@ public class SubjectDao extends AbstractDao<Subject, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"SUBJECTS\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"NUMBER\" INTEGER NOT NULL ," + // 1: number
-                "\"NAME\" TEXT NOT NULL );"); // 2: name
+                "\"NAME\" TEXT NOT NULL );"); // 1: name
     }
 
     /** Drops the underlying database table. */
@@ -62,8 +60,7 @@ public class SubjectDao extends AbstractDao<Subject, Long> {
         if (id != null) {
             stmt.bindLong(1, id);
         }
-        stmt.bindLong(2, entity.getNumber());
-        stmt.bindString(3, entity.getName());
+        stmt.bindString(2, entity.getName());
     }
 
     @Override
@@ -74,8 +71,7 @@ public class SubjectDao extends AbstractDao<Subject, Long> {
         if (id != null) {
             stmt.bindLong(1, id);
         }
-        stmt.bindLong(2, entity.getNumber());
-        stmt.bindString(3, entity.getName());
+        stmt.bindString(2, entity.getName());
     }
 
     @Override
@@ -93,8 +89,7 @@ public class SubjectDao extends AbstractDao<Subject, Long> {
     public Subject readEntity(Cursor cursor, int offset) {
         Subject entity = new Subject( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.getInt(offset + 1), // number
-            cursor.getString(offset + 2) // name
+            cursor.getString(offset + 1) // name
         );
         return entity;
     }
@@ -102,8 +97,7 @@ public class SubjectDao extends AbstractDao<Subject, Long> {
     @Override
     public void readEntity(Cursor cursor, Subject entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setNumber(cursor.getInt(offset + 1));
-        entity.setName(cursor.getString(offset + 2));
+        entity.setName(cursor.getString(offset + 1));
      }
     
     @Override

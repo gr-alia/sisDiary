@@ -11,8 +11,6 @@ public class Subject {
     @Id
     private Long id;
     @NotNull
-    private Integer number;
-    @NotNull
     private String name;
     /** Used to resolve relations */
     @Generated(hash = 2040040024)
@@ -22,15 +20,13 @@ public class Subject {
     private transient SubjectDao myDao;
 
 
-    public Subject(Integer number, String name) {
-        this.number = number;
+    public Subject(String name) {
         this.name = name;
     }
 
-    @Generated(hash = 381522931)
-    public Subject(Long id, @NotNull Integer number, @NotNull String name) {
+    @Generated(hash = 481053646)
+    public Subject(Long id, @NotNull String name) {
         this.id = id;
-        this.number = number;
         this.name = name;
     }
 
@@ -44,14 +40,6 @@ public class Subject {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Integer getNumber() {
-        return number;
-    }
-
-    public void setNumber(Integer number) {
-        this.number = number;
     }
 
     public void setName(String name) {

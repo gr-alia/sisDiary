@@ -1,6 +1,6 @@
 package com.alia.sisdiary.ui.fragment;
 
-import android.app.Activity;
+
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -11,12 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alia.sisdiary.App;
 import com.alia.sisdiary.R;
 import com.alia.sisdiary.model.DaoSession;
+import com.alia.sisdiary.model.ScheduledSubject;
+import com.alia.sisdiary.model.ScheduledSubjectDao;
 import com.alia.sisdiary.model.Subject;
 import com.alia.sisdiary.model.SubjectDao;
 import com.alia.sisdiary.ui.adapter.SubjectAdapter;
@@ -31,16 +32,20 @@ public class DayListTimetableFragment extends Fragment {
     public static final String ARG_NUM = "ARG_NUM";
     private static final String TAG = "DayListTimetableFragment";
 
+    private int weekdayNumber;
+
     private FloatingActionButton mFab;
     private RecyclerView mTimetableRecyclerView;
     private EditText mNumberEditText;
     private EditText mNameEditText;
 
     private SubjectAdapter mAdapter;
-    private List<Subject> mSubjects;
+    private List<ScheduledSubject> mSubjects;
+
+    private ScheduledSubjectDao mScheduledSubjectDao;
+    private Query<ScheduledSubject> mScheduledSubjectQuery;
 
     private SubjectDao mSubjectDao;
-    private Query<Subject> mSubjectQuery;
 
 
     public DayListTimetableFragment() {
@@ -57,10 +62,11 @@ public class DayListTimetableFragment extends Fragment {
         return fragment;
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        weekdayNumber = args.getInt(ARG_NUM);
 
     }
 
@@ -71,22 +77,25 @@ public class DayListTimetableFragment extends Fragment {
                 false);
         setupViews(view);
         // get the subject DAO
-        DaoSession daoSession = ((App)getActivity().getApplication()).getDaoSession();
+        DaoSession daoSession = ((App) getActivity().getApplication()).getDaoSession();
         mSubjectDao = daoSession.getSubjectDao();
+        mScheduledSubjectDao = daoSession.getScheduledSubjectDao();
 
-        // query all cats, sorted a-z by their name
-        mSubjectQuery = mSubjectDao.queryBuilder().orderAsc(SubjectDao.Properties.Number).build();
+        // query all subjects, sorted 1-n by their lesson number
+        mScheduledSubjectQuery = mScheduledSubjectDao.queryBuilder()
+                .where(ScheduledSubjectDao.Properties.Weekday.eq(weekdayNumber))
+                .orderAsc(ScheduledSubjectDao.Properties.LessonNumber)
+                .build();
         updateSubjects();
         return view;
     }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        String tabTitles[] = new String[]{"ПН", "ВТ", "СР", "ЧТ", "ПТ"};
 
-        Bundle args = getArguments();
-        int dayOfWeek = args.getInt(ARG_NUM);
     }
+
 
     private void setupViews(View view) {
         mTimetableRecyclerView = (RecyclerView) view
@@ -99,10 +108,11 @@ public class DayListTimetableFragment extends Fragment {
                 .findViewById(R.id.subject_name_et);
 
         mSubjects = new ArrayList<>();
-        mAdapter = new SubjectAdapter(mSubjects,subjectClickListener);
+        mAdapter = new SubjectAdapter(mSubjects, subjectClickListener);
         mTimetableRecyclerView.setLayoutManager(new LinearLayoutManager
                 (getActivity()));
         mTimetableRecyclerView.setAdapter(mAdapter);
+
 
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,7 +122,7 @@ public class DayListTimetableFragment extends Fragment {
         });
     }
 
-    private void addSubject(){
+    private void addSubject() {
         String number = mNumberEditText.getText().toString();
         String name = mNameEditText.getText().toString();
         mNumberEditText.setText("");
@@ -125,81 +135,36 @@ public class DayListTimetableFragment extends Fragment {
             return;
         }
         Subject subject = new Subject();
-        subject.setNumber(Integer.parseInt(number));
         subject.setName(name);
         mSubjectDao.insert(subject);
+        Log.i(TAG, "Subject has id: " + subject.getId());
+        ScheduledSubject scheduledSubject = new ScheduledSubject(subject);
+        scheduledSubject.setLessonNumber(Integer.parseInt(number));
+        Log.i(TAG, "Set this weekday number: " + weekdayNumber);
+        scheduledSubject.setWeekday(weekdayNumber);
+        mScheduledSubjectDao.insert(scheduledSubject);
         updateSubjects();
     }
+
+
     public void updateSubjects() {
-        mSubjects = mSubjectQuery.list();   //To load all entities into memory
+        mSubjects = mScheduledSubjectQuery.list();   //To load all entities into memory
         mAdapter.setSubjects(mSubjects);
     }
+
+
     SubjectAdapter.SubjectClickListener subjectClickListener = new SubjectAdapter.SubjectClickListener() {
         @Override
         public void onSubjectClick(int position) {
-            Subject subject = mAdapter.getSubject(position);
-            Long subjectId = subject.getId();
+            ScheduledSubject scheduledSubject = mAdapter.getScheduleSubject(position);
+            Long scheduledSubjectId = scheduledSubject.getId();
 
-            mSubjectDao.deleteByKey(subjectId);
-            Log.i("SubjectDao", "Deleted subject, ID: " + subjectId + " NAME: " + subject.getName());
+            mScheduledSubjectDao.deleteByKey(scheduledSubjectId);
+            Log.i(TAG, "Deleted subject, ID: " + scheduledSubjectId + " NAME: " + scheduledSubject.getSubject().getName());
             updateSubjects();
         }
     };
 
-/*
-    private class CreateTimetableTask extends AsyncTask<String, Void, Boolean> {
-
-        @Override
-        protected Boolean doInBackground(String... strings) {
-            String dayOfWeek = strings[0];
-            try {
-                SQLiteOpenHelper sisdiaryDatabaseHelper = new SisdiaryDatabaseHelper(getContext());
-                db = sisdiaryDatabaseHelper.getReadableDatabase();
-                cursor = db.query("SUBJECT",
-                        new String[]{"_id", "NAME"},
-                        "DAY=?",
-                        new String[]{dayOfWeek},
-                        null, null, null
-                );
-
-                return true;
-            } catch (SQLiteException e) {
-                return false;
-            }
-
-        }
-
-        protected void onPostExecute(Boolean success) {
-            Log.i(TAG, "doInBackground finished");
-            if (!success) {
-                Toast toast = Toast.makeText(getActivity(),
-                        "Database unavailable", Toast.LENGTH_SHORT);
-                toast.show();
-            } else {
-                if (cursor.moveToFirst()) {
-                    do {
-                        Subject subject = new Subject();
-                        subject.setName(cursor.getString(1));
-                        mArrayList.add(subject);
-                    } while (cursor.moveToNext());
-                }
 
 
-               // CursorAdapter cursorAdapter = new SimpleCursorAdapter(
-               //         getActivity(),
-               //         android.R.layout.simple_list_item_1,
-               //         cursor,
-               //         new String[]{"NAME"},
-               //        new int[]{android.R.id.text1},
-               //         0);
-               //setListAdapter(cursorAdapter);
-
-                Log.i(TAG, "Fill arrayList from cursor "+ mArrayList);
-                mAdapter = new SubjectAdapter(mArrayList);
-                mTimetableRecyclerView.setAdapter(mAdapter);
-            }
-            Log.i(TAG, "onPostExecute finished");
-        }
-    }
-    */
 }

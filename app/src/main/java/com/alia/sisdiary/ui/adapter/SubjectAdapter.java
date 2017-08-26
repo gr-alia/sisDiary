@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.alia.sisdiary.R;
+import com.alia.sisdiary.model.ScheduledSubject;
 import com.alia.sisdiary.model.Subject;
 
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectHolder> {
     private SubjectClickListener mClickListener;
-    private List<Subject> mSubjects;
+    private List<ScheduledSubject> mSubjects;
 
     public interface SubjectClickListener {
         void onSubjectClick(int position);
@@ -27,7 +28,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
 
         private TextView mNumberTextView;
         private TextView mNameTextView;
-        private Subject mSubject;
+        private ScheduledSubject mSubject;
 
         public SubjectHolder(View itemView, final SubjectClickListener clickListener) {
             super(itemView);
@@ -50,26 +51,25 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
                @Override
                public void onClick(View v) {
                    Log.i(TAG, "Item clicked: " + mSubject.getId());
-
                    Intent intent = new Intent(getActivity(), HomeWorkActivity.class);
                    intent.putExtra(HomeWorkActivity.EXTRA_SUBJECTNO, (int) mSubject.getId());
                    startActivity(intent);
 
                }
         */
-        public void bindSubject(Subject subject) {
+        public void bindSubject(ScheduledSubject subject) {
             mSubject = subject;
-            mNameTextView.setText(mSubject.getName());
-            mNumberTextView.setText(String.valueOf(mSubject.getNumber()));
+            mNameTextView.setText(mSubject.getSubject().getName());
+            mNumberTextView.setText(String.valueOf(mSubject.getLessonNumber()));
         }
     }
 
-    public SubjectAdapter(List<Subject> subjects, SubjectClickListener clickListener) {
+    public SubjectAdapter(List<ScheduledSubject> subjects, SubjectClickListener clickListener) {
         this.mClickListener = clickListener;
         this.mSubjects = subjects;
     }
 
-    public Subject getSubject(int position) {
+    public ScheduledSubject getScheduleSubject(int position) {
         return mSubjects.get(position);
     }
 
@@ -83,7 +83,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
 
     @Override
     public void onBindViewHolder(SubjectHolder holder, int position) {
-        Subject subject = mSubjects.get(position);
+        ScheduledSubject subject = mSubjects.get(position);
         holder.bindSubject(subject);
     }
 
@@ -92,7 +92,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
         return mSubjects.size();
     }
 
-    public void setSubjects(List<Subject> subjects) {
+    public void setSubjects(List<ScheduledSubject> subjects) {
         mSubjects = subjects;
         notifyDataSetChanged();
     }
