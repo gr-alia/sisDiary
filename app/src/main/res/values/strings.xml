@@ -13,6 +13,7 @@
     <string name="menu_title_timetable">Розклад</string>
     <string name="menu_title_photos">Фоточки</string>
 
+    <string name="cab_delete">Видалити</string>
 
 
 </resources>

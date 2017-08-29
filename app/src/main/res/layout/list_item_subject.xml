@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="horizontal"
+              android:id="@+id/subject_item"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+              android:layout_height="80dp"
+              android:orientation="horizontal"
+              android:gravity="center"
               android:padding="4dp"
               android:paddingBottom="8dp"
               android:paddingTop="8dp">
+
     <TextView
         android:id="@+id/list_item_subject_number"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_weight="1"
-        android:textSize="24sp"
-        android:text=""/>
+        android:text=""
+        android:textSize="24sp"/>
+
     <TextView
         android:id="@+id/list_item_subject_name"
         android:layout_width="0dp"

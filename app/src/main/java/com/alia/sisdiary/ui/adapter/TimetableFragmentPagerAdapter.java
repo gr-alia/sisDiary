@@ -8,7 +8,7 @@ import com.alia.sisdiary.ui.fragment.DayListTimetableFragment;
 
 public class TimetableFragmentPagerAdapter extends FragmentPagerAdapter {
     final int PAGE_COUNT = 5;
-    private String tabTitles[] = new String[]{"ПН", "ВТ", "СР", "ЧТ", "ПТ"};
+    private String tabTitles[] = new String[]{"1", "2", "3", "4", "5"};
 
 
     public TimetableFragmentPagerAdapter(FragmentManager fm) {

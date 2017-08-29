@@ -155,12 +155,13 @@ public class DayListTimetableFragment extends Fragment {
 
     SubjectAdapter.SubjectClickListener subjectClickListener = new SubjectAdapter.SubjectClickListener() {
         @Override
-        public void onSubjectClick(int position) {
-            ScheduledSubject scheduledSubject = mAdapter.getScheduleSubject(position);
-            Long scheduledSubjectId = scheduledSubject.getId();
+        public void onSubjectClick(ScheduledSubject subjectItem) {
+
+            //ScheduledSubject scheduledSubject = mAdapter.getScheduleSubject(position);
+            Long scheduledSubjectId = subjectItem.getId();
 
             mScheduledSubjectDao.deleteByKey(scheduledSubjectId);
-            Log.i(TAG, "Deleted subject, ID: " + scheduledSubjectId + " NAME: " + scheduledSubject.getSubject().getName());
+            Log.i(TAG, "Deleted subject, ID: " + scheduledSubjectId + " NAME: " + subjectItem.getSubject().getName());
             updateSubjects();
         }
     };
