@@ -24,8 +24,8 @@ public class HomeWorkActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_work);
 
-        int subjectNO = (Integer) getIntent().getExtras().get(EXTRA_SUBJECTNO);
-
+      //  int subjectNO = (Integer) getIntent().getExtras().get(EXTRA_SUBJECTNO);
+/*
         //Create Cursor
         try {
             SQLiteOpenHelper sisdiaryDatabaseHelper = new SisdiaryDatabaseHelper(this);
@@ -54,20 +54,18 @@ public class HomeWorkActivity extends AppCompatActivity {
             Toast toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_SHORT);
             toast.show();
         }
-
+*/
     }
 
     public void onAddHomeWork(View view) {
         EditText homeWorkEdit = (EditText) findViewById(R.id.editHomeWork);
         int subjectNO = (Integer) getIntent().getExtras().get(EXTRA_SUBJECTNO);
-        new UpdateHomeWorkTask(homeWorkEdit.getText().toString()).execute(subjectNO);
     }
 
     public void onDeleteHomeWork(View view) {
         int subjectNO = (Integer) getIntent().getExtras().get(EXTRA_SUBJECTNO);
-        new UpdateHomeWorkTask(" ").execute(subjectNO);
     }
-
+/*
     private class UpdateHomeWorkTask extends AsyncTask<Integer, Void, Boolean> {
         ContentValues homeworkValues;
         String homeworkText;
@@ -124,5 +122,7 @@ public class HomeWorkActivity extends AppCompatActivity {
             }
         }
 
+
     }
+    */
 }

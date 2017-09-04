@@ -1,5 +1,7 @@
 package com.alia.sisdiary.ui.adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
@@ -17,7 +19,9 @@ import android.widget.Toast;
 import com.alia.sisdiary.R;
 import com.alia.sisdiary.model.ScheduledSubject;
 import com.alia.sisdiary.model.Subject;
+import com.alia.sisdiary.ui.activity.HomeWorkActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +30,7 @@ import java.util.List;
  */
 
 public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectHolder> {
+    private Context mContext;
     private SubjectClickListener mClickListener;
     private List<ScheduledSubject> mSubjects;
 
@@ -76,7 +81,8 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
     };
 
 
-    public SubjectAdapter(List<ScheduledSubject> subjects, SubjectClickListener clickListener) {
+    public SubjectAdapter(Context context, List<ScheduledSubject> subjects, SubjectClickListener clickListener) {
+        this.mContext = context;
         this.mClickListener = clickListener;
         this.mSubjects = subjects;
     }
@@ -104,6 +110,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
 
         private LinearLayout mSubjectItem;
         private TextView mNumberTextView;
+        private TextView mTimeTextView;
         private TextView mNameTextView;
         private ScheduledSubject mSubject;
 
@@ -115,18 +122,13 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
                     itemView.findViewById(R.id.list_item_subject_name);
             mNumberTextView = (TextView)
                     itemView.findViewById(R.id.list_item_subject_number);
+            mTimeTextView = (TextView)
+                    itemView.findViewById(R.id.list_item_time);
         }
 
-        /*
-               @Override
-               public void onClick(View v) {
-                   Log.i(TAG, "Item clicked: " + mSubject.getId());
-                   Intent intent = new Intent(getActivity(), HomeWorkActivity.class);
-                   intent.putExtra(HomeWorkActivity.EXTRA_SUBJECTNO, (int) mSubject.getId());
-                   startActivity(intent);
 
-               }
-        */
+
+
         public void selectItem(ScheduledSubject item) {
             if (multiSelect) {
                 if (selectedItems.contains(item)) {
@@ -144,6 +146,9 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
             mNameTextView.setText(mSubject.getSubject().getName());
             mNumberTextView.setText(String.valueOf(mSubject.getLessonNumber()));
 
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+            mTimeTextView.setText(simpleDateFormat.format(subject.getLessonTime()));
+
             if (selectedItems.contains(subject)) {
                 mSubjectItem.setBackgroundColor(Color.LTGRAY);
             } else {
@@ -155,7 +160,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
                     if (mActionMode != null) {
                         return false;
                     }
-                    mActionMode = ((AppCompatActivity) v.getContext()).startSupportActionMode(actionModeCallbacks);
+                    mActionMode = ((AppCompatActivity) mContext).startSupportActionMode(actionModeCallbacks);
                     selectItem(subject);
                     return true;
                 }
@@ -169,8 +174,13 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
                             mActionMode.finish();
                     }
                     else {
-                        Toast toast = Toast.makeText(itemView.getContext(), "Clicked the item", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(itemView.getContext(), "Item clicked: ", Toast.LENGTH_LONG);
                         toast.show();
+                            Intent intent = new Intent(mContext, HomeWorkActivity.class);
+                           // intent.putExtra(HomeWorkActivity.EXTRA_SUBJECTNO, (int) mSubject.getId());
+                            mContext.startActivity(intent);
+
+
                     }
                 }
             });

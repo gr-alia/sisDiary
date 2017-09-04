@@ -14,6 +14,10 @@
     <string name="menu_title_photos">Фоточки</string>
 
     <string name="cab_delete">Видалити</string>
+    
+    <string name="dialog_tittle">Додати новий урок:</string>
+    <string name="time_begin">Час початку</string>
+
 
 
 </resources>

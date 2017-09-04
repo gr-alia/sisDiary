@@ -4,26 +4,41 @@
               android:layout_width="match_parent"
               android:layout_height="80dp"
               android:orientation="horizontal"
-              android:gravity="center"
-              android:padding="4dp"
-              android:paddingBottom="8dp"
-              android:paddingTop="8dp">
+             >
 
-    <TextView
-        android:id="@+id/list_item_subject_number"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_weight="1"
-        android:text=""
-        android:textSize="24sp"/>
+    <RelativeLayout
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/list_item_subject_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            />
+
+        <TextView
+            android:id="@+id/list_item_time"
+            android:layout_below="@+id/list_item_subject_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAlignment="center"
+            android:textSize="18sp"
+            />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/list_item_subject_name"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="6"
         android:textSize="24sp"
+        android:layout_gravity="center_vertical"
         />
 
 </LinearLayout>

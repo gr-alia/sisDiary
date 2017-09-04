@@ -29,6 +29,7 @@ public class ScheduledSubjectDao extends AbstractDao<ScheduledSubject, Long> {
         public final static Property SubjectId = new Property(1, Long.class, "subjectId", false, "SUBJECT_ID");
         public final static Property Weekday = new Property(2, Integer.class, "weekday", false, "WEEKDAY");
         public final static Property LessonNumber = new Property(3, Integer.class, "lessonNumber", false, "LESSON_NUMBER");
+        public final static Property LessonTime = new Property(4, java.util.Date.class, "lessonTime", false, "LESSON_TIME");
     }
 
     private DaoSession daoSession;
@@ -50,7 +51,8 @@ public class ScheduledSubjectDao extends AbstractDao<ScheduledSubject, Long> {
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
                 "\"SUBJECT_ID\" INTEGER NOT NULL ," + // 1: subjectId
                 "\"WEEKDAY\" INTEGER NOT NULL ," + // 2: weekday
-                "\"LESSON_NUMBER\" INTEGER NOT NULL );"); // 3: lessonNumber
+                "\"LESSON_NUMBER\" INTEGER NOT NULL ," + // 3: lessonNumber
+                "\"LESSON_TIME\" INTEGER NOT NULL );"); // 4: lessonTime
         // Add Indexes
         db.execSQL("CREATE UNIQUE INDEX " + constraint + "IDX_SCHEDULED_SUBJECTS_SUBJECT_ID_WEEKDAY_LESSON_NUMBER ON \"SCHEDULED_SUBJECTS\"" +
                 " (\"SUBJECT_ID\" ASC,\"WEEKDAY\" ASC,\"LESSON_NUMBER\" ASC);");
@@ -73,6 +75,7 @@ public class ScheduledSubjectDao extends AbstractDao<ScheduledSubject, Long> {
         stmt.bindLong(2, entity.getSubjectId());
         stmt.bindLong(3, entity.getWeekday());
         stmt.bindLong(4, entity.getLessonNumber());
+        stmt.bindLong(5, entity.getLessonTime().getTime());
     }
 
     @Override
@@ -86,6 +89,7 @@ public class ScheduledSubjectDao extends AbstractDao<ScheduledSubject, Long> {
         stmt.bindLong(2, entity.getSubjectId());
         stmt.bindLong(3, entity.getWeekday());
         stmt.bindLong(4, entity.getLessonNumber());
+        stmt.bindLong(5, entity.getLessonTime().getTime());
     }
 
     @Override
@@ -105,7 +109,8 @@ public class ScheduledSubjectDao extends AbstractDao<ScheduledSubject, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getLong(offset + 1), // subjectId
             cursor.getInt(offset + 2), // weekday
-            cursor.getInt(offset + 3) // lessonNumber
+            cursor.getInt(offset + 3), // lessonNumber
+            new java.util.Date(cursor.getLong(offset + 4)) // lessonTime
         );
         return entity;
     }
@@ -116,6 +121,7 @@ public class ScheduledSubjectDao extends AbstractDao<ScheduledSubject, Long> {
         entity.setSubjectId(cursor.getLong(offset + 1));
         entity.setWeekday(cursor.getInt(offset + 2));
         entity.setLessonNumber(cursor.getInt(offset + 3));
+        entity.setLessonTime(new java.util.Date(cursor.getLong(offset + 4)));
      }
     
     @Override

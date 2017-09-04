@@ -1,6 +1,8 @@
 package com.alia.sisdiary.ui.fragment;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -11,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.alia.sisdiary.App;
@@ -25,19 +28,20 @@ import com.alia.sisdiary.ui.adapter.SubjectAdapter;
 import org.greenrobot.greendao.query.Query;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
 public class DayListTimetableFragment extends Fragment {
-    public static final String ARG_NUM = "ARG_NUM";
+    private static final String ARG_NUM = "ARG_NUM";
     private static final String TAG = "DayListTimetableFragment";
+    private static final String DIALOG_ADD_SUBJECT = "DialogAddSubject";
+    private static final int REQUEST_NEW_SUBJECT = 0;
 
     private int weekdayNumber;
 
-    private FloatingActionButton mFab;
+    private ImageButton mAddButton;
     private RecyclerView mTimetableRecyclerView;
-    private EditText mNumberEditText;
-    private EditText mNameEditText;
 
     private SubjectAdapter mAdapter;
     private List<ScheduledSubject> mSubjects;
@@ -96,54 +100,56 @@ public class DayListTimetableFragment extends Fragment {
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        if (requestCode == REQUEST_NEW_SUBJECT) {
+            String name = (String) data.getSerializableExtra(AddSubjectDialog.EXTRA_NAME);
+            String number = (String) data.getSerializableExtra(AddSubjectDialog.EXTRA_NUMBER);
+            int[] time = (int[]) data.getSerializableExtra(AddSubjectDialog.EXTRA_TIME);
+            Subject subject = new Subject();
+            subject.setName(name);
+            mSubjectDao.insert(subject);
+            Log.i(TAG, "Subject has id: " + subject.getId());
+            ScheduledSubject scheduledSubject = new ScheduledSubject(subject);
+            scheduledSubject.setLessonNumber(Integer.parseInt(number));
+            scheduledSubject.setLessonIntTime(time[0], time[1]);
+            Log.i(TAG, "Set this weekday number: " + weekdayNumber);
+            scheduledSubject.setWeekday(weekdayNumber);
+            mScheduledSubjectDao.insert(scheduledSubject);
+            updateSubjects();
+        }
+
+    }
 
     private void setupViews(View view) {
         mTimetableRecyclerView = (RecyclerView) view
                 .findViewById(R.id.timetable_recycler_view);
-        mFab = (FloatingActionButton) view
-                .findViewById(R.id.fab);
-        mNumberEditText = (EditText) view
-                .findViewById(R.id.subject_number_et);
-        mNameEditText = (EditText) view
-                .findViewById(R.id.subject_name_et);
+        mAddButton = (ImageButton) view.findViewById(R.id.add_button);
 
         mSubjects = new ArrayList<>();
-        mAdapter = new SubjectAdapter(mSubjects, subjectClickListener);
+        mAdapter = new SubjectAdapter(getContext(), mSubjects, subjectClickListener);
         mTimetableRecyclerView.setLayoutManager(new LinearLayoutManager
                 (getActivity()));
         mTimetableRecyclerView.setAdapter(mAdapter);
 
-
-        mFab.setOnClickListener(new View.OnClickListener() {
+        mAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 addSubject();
             }
         });
     }
 
-    private void addSubject() {
-        String number = mNumberEditText.getText().toString();
-        String name = mNameEditText.getText().toString();
-        mNumberEditText.setText("");
-        mNameEditText.setText("");
-        mNumberEditText.clearFocus();
-        mNameEditText.clearFocus();
 
-        if (name.trim().equals("") || number.trim().equals("")) {
-            Toast.makeText(getActivity(), "Номер або назва не заповнені", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        Subject subject = new Subject();
-        subject.setName(name);
-        mSubjectDao.insert(subject);
-        Log.i(TAG, "Subject has id: " + subject.getId());
-        ScheduledSubject scheduledSubject = new ScheduledSubject(subject);
-        scheduledSubject.setLessonNumber(Integer.parseInt(number));
-        Log.i(TAG, "Set this weekday number: " + weekdayNumber);
-        scheduledSubject.setWeekday(weekdayNumber);
-        mScheduledSubjectDao.insert(scheduledSubject);
-        updateSubjects();
+    private void addSubject() {
+        AddSubjectDialog addSubjectDialog = new AddSubjectDialog();
+        addSubjectDialog.setTargetFragment(DayListTimetableFragment.this, REQUEST_NEW_SUBJECT);
+        addSubjectDialog.show(getFragmentManager(), DIALOG_ADD_SUBJECT);
+
+
     }
 
 
@@ -165,7 +171,6 @@ public class DayListTimetableFragment extends Fragment {
             updateSubjects();
         }
     };
-
 
 
 }

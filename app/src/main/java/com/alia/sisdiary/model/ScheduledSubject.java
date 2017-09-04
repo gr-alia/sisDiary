@@ -8,6 +8,10 @@ import org.greenrobot.greendao.annotation.ToOne;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.DaoException;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 /**
  * Created by Alyona on 22.08.2017.
  */
@@ -29,6 +33,10 @@ public class ScheduledSubject {
     private Integer weekday;
     @NotNull
     private Integer lessonNumber;
+    @NotNull
+    private Date lessonTime;
+
+  
     /** Used to resolve relations */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
@@ -43,13 +51,14 @@ public class ScheduledSubject {
         this.subjectId = subject.getId();
     }
 
-    @Generated(hash = 36509406)
-    public ScheduledSubject(Long id, @NotNull Long subjectId,
-            @NotNull Integer weekday, @NotNull Integer lessonNumber) {
+    @Generated(hash = 316209582)
+    public ScheduledSubject(Long id, @NotNull Long subjectId, @NotNull Integer weekday,
+            @NotNull Integer lessonNumber, @NotNull Date lessonTime) {
         this.id = id;
         this.subjectId = subjectId;
         this.weekday = weekday;
         this.lessonNumber = lessonNumber;
+        this.lessonTime = lessonTime;
     }
 
     @Generated(hash = 1688737304)
@@ -79,6 +88,21 @@ public class ScheduledSubject {
     public void setLessonNumber(Integer lessonNumber) {
         this.lessonNumber = lessonNumber;
     }
+    public Date getLessonTime() {
+        return lessonTime;
+    }
+
+    public void setLessonTime(Date lessonTime) {
+        this.lessonTime = lessonTime;
+    }
+    public void setLessonIntTime(int hours, int minutes){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, hours);
+        calendar.set(Calendar.MINUTE, minutes);
+        lessonTime = calendar.getTime();
+    }
+
+
 
     public Long getSubjectId() {
         return this.subjectId;
