@@ -159,9 +159,9 @@ public class DayListTimetableFragment extends Fragment {
     }
 
 
-    SubjectAdapter.SubjectClickListener subjectClickListener = new SubjectAdapter.SubjectClickListener() {
+    SubjectAdapter.ActionModeMenuClickListener subjectClickListener = new SubjectAdapter.ActionModeMenuClickListener() {
         @Override
-        public void onSubjectClick(ScheduledSubject subjectItem) {
+        public void onDeleteClick(ScheduledSubject subjectItem) {
 
             //ScheduledSubject scheduledSubject = mAdapter.getScheduleSubject(position);
             Long scheduledSubjectId = subjectItem.getId();

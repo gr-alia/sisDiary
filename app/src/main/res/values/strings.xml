@@ -17,6 +17,8 @@
     
     <string name="dialog_tittle">Додати новий урок:</string>
     <string name="time_begin">Час початку</string>
+    <string name="drawer_open">Опен</string>
+    <string name="drawer_close">Клоуз</string>
 
 
 

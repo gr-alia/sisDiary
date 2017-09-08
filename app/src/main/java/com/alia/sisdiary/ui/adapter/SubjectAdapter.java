@@ -2,6 +2,7 @@ package com.alia.sisdiary.ui.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.drm.DrmStore;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
@@ -31,15 +32,15 @@ import java.util.List;
 
 public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectHolder> {
     private Context mContext;
-    private SubjectClickListener mClickListener;
+    private ActionModeMenuClickListener mClickListener;
     private List<ScheduledSubject> mSubjects;
 
     private boolean multiSelect = false;
     private ArrayList<ScheduledSubject> selectedItems = new ArrayList<>();
-     private ActionMode mActionMode;
+    private ActionMode mActionMode;
 
-    public interface SubjectClickListener {
-        void onSubjectClick(ScheduledSubject subjectItem);
+    public interface ActionModeMenuClickListener {
+        void onDeleteClick(ScheduledSubject subjectItem);
     }
 
     private ActionMode.Callback actionModeCallbacks = new ActionMode.Callback() {
@@ -62,7 +63,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
             switch (item.getItemId()) {
                 case R.id.delete_subject:
                     for (ScheduledSubject scheduledSubjectItem : selectedItems) {
-                        mClickListener.onSubjectClick(scheduledSubjectItem);
+                        mClickListener.onDeleteClick(scheduledSubjectItem);
                     }
                     mode.finish();
                     return true;
@@ -81,7 +82,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
     };
 
 
-    public SubjectAdapter(Context context, List<ScheduledSubject> subjects, SubjectClickListener clickListener) {
+    public SubjectAdapter(Context context, List<ScheduledSubject> subjects, ActionModeMenuClickListener clickListener) {
         this.mContext = context;
         this.mClickListener = clickListener;
         this.mSubjects = subjects;
@@ -114,7 +115,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
         private TextView mNameTextView;
         private ScheduledSubject mSubject;
 
-        public SubjectHolder(View itemView, final SubjectClickListener clickListener) {
+        public SubjectHolder(View itemView, final ActionModeMenuClickListener clickListener) {
             super(itemView);
             mSubjectItem = (LinearLayout)
                     itemView.findViewById(R.id.subject_item);
@@ -125,8 +126,6 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
             mTimeTextView = (TextView)
                     itemView.findViewById(R.id.list_item_time);
         }
-
-
 
 
         public void selectItem(ScheduledSubject item) {
@@ -172,13 +171,11 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
                         selectItem(subject);
                         if (selectedItems.isEmpty())
                             mActionMode.finish();
-                    }
-                    else {
-                        Toast toast = Toast.makeText(itemView.getContext(), "Item clicked: ", Toast.LENGTH_LONG);
-                        toast.show();
-                            Intent intent = new Intent(mContext, HomeWorkActivity.class);
-                           // intent.putExtra(HomeWorkActivity.EXTRA_SUBJECTNO, (int) mSubject.getId());
-                            mContext.startActivity(intent);
+                    } else {
+
+                        Intent intent = new Intent(mContext, HomeWorkActivity.class);
+                       // intent.putExtra(HomeWorkActivity.EXTRA_SUBJECTNO, (int) mSubject.getId());
+                        mContext.startActivity(intent);
 
 
                     }

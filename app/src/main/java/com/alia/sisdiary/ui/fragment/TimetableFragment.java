@@ -32,6 +32,8 @@ public class TimetableFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_timetable, container, false);
+        getActivity().setTitle(R.string.menu_title_timetable);
+
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         viewPager.setAdapter(new TimetableFragmentPagerAdapter(getChildFragmentManager()));
