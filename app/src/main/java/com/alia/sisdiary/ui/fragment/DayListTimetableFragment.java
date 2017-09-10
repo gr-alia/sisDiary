@@ -10,10 +10,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alia.sisdiary.App;
@@ -36,7 +38,12 @@ public class DayListTimetableFragment extends Fragment {
     private static final String ARG_NUM = "ARG_NUM";
     private static final String TAG = "DayListTimetableFragment";
     private static final String DIALOG_ADD_SUBJECT = "DialogAddSubject";
+    private static final String DIALOG_ADD_HOMEWORK = "DialogAddHomeWork";
+
     private static final int REQUEST_NEW_SUBJECT = 0;
+    private static final int REQUEST_NEW_HOMEWORK = 1;
+    private static final int REQUEST_EDIT_LESSON = 2;
+
 
     private int weekdayNumber;
 
@@ -45,6 +52,7 @@ public class DayListTimetableFragment extends Fragment {
 
     private SubjectAdapter mAdapter;
     private List<ScheduledSubject> mSubjects;
+    private ScheduledSubject mSubjectItem;
 
     private ScheduledSubjectDao mScheduledSubjectDao;
     private Query<ScheduledSubject> mScheduledSubjectQuery;
@@ -88,7 +96,7 @@ public class DayListTimetableFragment extends Fragment {
         // query all subjects, sorted 1-n by their lesson number
         mScheduledSubjectQuery = mScheduledSubjectDao.queryBuilder()
                 .where(ScheduledSubjectDao.Properties.Weekday.eq(weekdayNumber))
-                .orderAsc(ScheduledSubjectDao.Properties.LessonNumber)
+                .orderAsc(ScheduledSubjectDao.Properties.LessonTime)
                 .build();
         updateSubjects();
         return view;
@@ -107,18 +115,31 @@ public class DayListTimetableFragment extends Fragment {
         }
         if (requestCode == REQUEST_NEW_SUBJECT) {
             String name = (String) data.getSerializableExtra(AddSubjectDialog.EXTRA_NAME);
-            String number = (String) data.getSerializableExtra(AddSubjectDialog.EXTRA_NUMBER);
             int[] time = (int[]) data.getSerializableExtra(AddSubjectDialog.EXTRA_TIME);
             Subject subject = new Subject();
             subject.setName(name);
             mSubjectDao.insert(subject);
             Log.i(TAG, "Subject has id: " + subject.getId());
             ScheduledSubject scheduledSubject = new ScheduledSubject(subject);
-            scheduledSubject.setLessonNumber(Integer.parseInt(number));
             scheduledSubject.setLessonIntTime(time[0], time[1]);
             Log.i(TAG, "Set this weekday number: " + weekdayNumber);
             scheduledSubject.setWeekday(weekdayNumber);
             mScheduledSubjectDao.insert(scheduledSubject);
+            updateSubjects();
+        } else if (requestCode == REQUEST_NEW_HOMEWORK) {
+            String homework = (String) data.getSerializableExtra(AddHomeWorkDialog.EXTRA_HOMEWORK);
+            Log.i(TAG, "Data from intent " + homework);
+            mSubjectItem.setHomework(homework);
+            Log.i(TAG, "Subject item " + mSubjectItem.getSubject().getName());
+            mScheduledSubjectDao.insertOrReplace(mSubjectItem);
+            updateSubjects();
+        }
+        else if (requestCode == REQUEST_EDIT_LESSON){
+            String name = (String) data.getSerializableExtra(AddSubjectDialog.EXTRA_NAME);
+            int[] time = (int[]) data.getSerializableExtra(AddSubjectDialog.EXTRA_TIME);
+            mSubjectItem.getSubject().setName(name);
+            mSubjectItem.setLessonIntTime(time[0], time[1]);
+            mScheduledSubjectDao.insertOrReplace(mSubjectItem);
             updateSubjects();
         }
 
@@ -162,13 +183,28 @@ public class DayListTimetableFragment extends Fragment {
     SubjectAdapter.ActionModeMenuClickListener subjectClickListener = new SubjectAdapter.ActionModeMenuClickListener() {
         @Override
         public void onDeleteClick(ScheduledSubject subjectItem) {
-
-            //ScheduledSubject scheduledSubject = mAdapter.getScheduleSubject(position);
             Long scheduledSubjectId = subjectItem.getId();
 
             mScheduledSubjectDao.deleteByKey(scheduledSubjectId);
             Log.i(TAG, "Deleted subject, ID: " + scheduledSubjectId + " NAME: " + subjectItem.getSubject().getName());
             updateSubjects();
+        }
+
+        @Override
+        public void onAddHomeworkClick(ScheduledSubject subjectItem) {
+            mSubjectItem = subjectItem;
+            AddHomeWorkDialog addHomeWorkDialog = AddHomeWorkDialog.newInstance(subjectItem.getHomework());
+            addHomeWorkDialog.setTargetFragment(DayListTimetableFragment.this, REQUEST_NEW_HOMEWORK);
+            addHomeWorkDialog.show(getFragmentManager(), DIALOG_ADD_HOMEWORK);
+        }
+
+        @Override
+        public void onEditLessonClick(ScheduledSubject subjectItem) {
+            mSubjectItem = subjectItem;
+            AddSubjectDialog addSubjectDialog = AddSubjectDialog.newInstance(subjectItem.getSubject().getName(), subjectItem.getLessonTime());
+            addSubjectDialog.setTargetFragment(DayListTimetableFragment.this, REQUEST_EDIT_LESSON);
+            addSubjectDialog.show(getFragmentManager(), DIALOG_ADD_SUBJECT);
+
         }
     };
 

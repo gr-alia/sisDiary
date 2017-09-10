@@ -5,5 +5,15 @@
           android:icon="@drawable/ic_action_delete"
           android:title="@string/cab_delete"
           app:showAsAction="ifRoom"/>
+    <item android:id="@+id/add_home_work"
+          android:icon="@drawable/ic_action_add_homework"
+          android:title="@string/cab_add_homework"
+          android:visible="false"
+          app:showAsAction="ifRoom"/>
+    <item android:id="@+id/edit_lesson"
+          android:icon="@drawable/ic_action_edit"
+          android:title="@string/cab_edit_lesson"
+          android:visible="false"
+          app:showAsAction="ifRoom"/>
 
 </menu>

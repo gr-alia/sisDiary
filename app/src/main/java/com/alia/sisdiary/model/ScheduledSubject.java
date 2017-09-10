@@ -18,7 +18,7 @@ import java.util.GregorianCalendar;
 @Entity(active = true,
         nameInDb = "SCHEDULED_SUBJECTS",
         indexes = {
-        @Index(value = "subjectId, weekday, lessonNumber", unique = true)
+        @Index(value = "subjectId, weekday, lessonTime", unique = true)
         }
 )
 public class ScheduledSubject {
@@ -31,12 +31,14 @@ public class ScheduledSubject {
     private Subject subject;
     @NotNull
     private Integer weekday;
-    @NotNull
-    private Integer lessonNumber;
+
     @NotNull
     private Date lessonTime;
+@NotNull
+    private String homework;
 
-  
+
+
     /** Used to resolve relations */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
@@ -49,16 +51,17 @@ public class ScheduledSubject {
     public ScheduledSubject(Subject subject){
         this.subject = subject;
         this.subjectId = subject.getId();
+        this.homework = "";
     }
 
-    @Generated(hash = 316209582)
+    @Generated(hash = 2108389844)
     public ScheduledSubject(Long id, @NotNull Long subjectId, @NotNull Integer weekday,
-            @NotNull Integer lessonNumber, @NotNull Date lessonTime) {
+            @NotNull Date lessonTime, @NotNull String homework) {
         this.id = id;
         this.subjectId = subjectId;
         this.weekday = weekday;
-        this.lessonNumber = lessonNumber;
         this.lessonTime = lessonTime;
+        this.homework = homework;
     }
 
     @Generated(hash = 1688737304)
@@ -81,13 +84,6 @@ public class ScheduledSubject {
         this.weekday = weekday;
     }
 
-    public Integer getLessonNumber() {
-        return lessonNumber;
-    }
-
-    public void setLessonNumber(Integer lessonNumber) {
-        this.lessonNumber = lessonNumber;
-    }
     public Date getLessonTime() {
         return lessonTime;
     }
@@ -99,10 +95,19 @@ public class ScheduledSubject {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, hours);
         calendar.set(Calendar.MINUTE, minutes);
+        calendar.set(Calendar.YEAR, 2017);
+        calendar.set(Calendar.MONTH, 7);
+        calendar.set(Calendar.DAY_OF_MONTH, 27);
         lessonTime = calendar.getTime();
     }
 
+    public String getHomework() {
+        return homework;
+    }
 
+    public void setHomework(String homework) {
+        this.homework = homework;
+    }
 
     public Long getSubjectId() {
         return this.subjectId;

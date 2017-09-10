@@ -21,6 +21,9 @@ import com.alia.sisdiary.R;
 import com.alia.sisdiary.model.ScheduledSubject;
 import com.alia.sisdiary.model.Subject;
 import com.alia.sisdiary.ui.activity.HomeWorkActivity;
+import com.alia.sisdiary.ui.fragment.AddHomeWorkDialog;
+import com.alia.sisdiary.ui.fragment.AddSubjectDialog;
+import com.alia.sisdiary.ui.fragment.DayListTimetableFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,11 +39,17 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
     private List<ScheduledSubject> mSubjects;
 
     private boolean multiSelect = false;
+    private boolean isAddHwButton = false;
     private ArrayList<ScheduledSubject> selectedItems = new ArrayList<>();
     private ActionMode mActionMode;
 
     public interface ActionModeMenuClickListener {
         void onDeleteClick(ScheduledSubject subjectItem);
+
+        void onAddHomeworkClick(ScheduledSubject subjectItem);
+
+        void onEditLessonClick(ScheduledSubject subjectItem);
+
     }
 
     private ActionMode.Callback actionModeCallbacks = new ActionMode.Callback() {
@@ -54,17 +63,27 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-
-            return false;
+            menu.findItem(R.id.add_home_work).setVisible(isAddHwButton);
+            menu.findItem(R.id.edit_lesson).setVisible(isAddHwButton);
+            return true;
         }
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            ScheduledSubject scheduledSubjectItem = selectedItems.get(0);
             switch (item.getItemId()) {
                 case R.id.delete_subject:
-                    for (ScheduledSubject scheduledSubjectItem : selectedItems) {
-                        mClickListener.onDeleteClick(scheduledSubjectItem);
+                    for (ScheduledSubject lesson : selectedItems) {
+                        mClickListener.onDeleteClick(lesson);
                     }
+                    mode.finish();
+                    return true;
+                case R.id.add_home_work:
+                    mClickListener.onAddHomeworkClick(scheduledSubjectItem);
+                    mode.finish();
+                    return true;
+                case R.id.edit_lesson:
+                    mClickListener.onEditLessonClick(scheduledSubjectItem);
                     mode.finish();
                     return true;
                 default:
@@ -98,8 +117,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
 
     @Override
     public void onBindViewHolder(SubjectHolder holder, int position) {
-        ScheduledSubject subject = mSubjects.get(position);
-        holder.bindSubject(subject);
+        holder.bindSubject(position);
     }
 
     @Override
@@ -113,6 +131,8 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
         private TextView mNumberTextView;
         private TextView mTimeTextView;
         private TextView mNameTextView;
+        private TextView mHomeworkTextView;
+
         private ScheduledSubject mSubject;
 
         public SubjectHolder(View itemView, final ActionModeMenuClickListener clickListener) {
@@ -125,6 +145,8 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
                     itemView.findViewById(R.id.list_item_subject_number);
             mTimeTextView = (TextView)
                     itemView.findViewById(R.id.list_item_time);
+            mHomeworkTextView = (TextView)
+                    itemView.findViewById(R.id.list_item_homework);
         }
 
 
@@ -137,13 +159,25 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
                     selectedItems.add(item);
                     mSubjectItem.setBackgroundColor(Color.LTGRAY);
                 }
+                if (selectedItems.size() == 1) {
+                    isAddHwButton = true;
+                    mActionMode.invalidate();
+                }
+                else {
+                    isAddHwButton = false;
+                    mActionMode.invalidate();
+                }
+
             }
         }
 
-        public void bindSubject(final ScheduledSubject subject) {
+        public void bindSubject(int position) {
+            final ScheduledSubject subject = mSubjects.get(position);
+
             mSubject = subject;
             mNameTextView.setText(mSubject.getSubject().getName());
-            mNumberTextView.setText(String.valueOf(mSubject.getLessonNumber()));
+            mNumberTextView.setText(String.valueOf(position + 1));
+            mHomeworkTextView.setText(mSubject.getHomework());
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
             mTimeTextView.setText(simpleDateFormat.format(subject.getLessonTime()));
@@ -174,7 +208,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
                     } else {
 
                         Intent intent = new Intent(mContext, HomeWorkActivity.class);
-                       // intent.putExtra(HomeWorkActivity.EXTRA_SUBJECTNO, (int) mSubject.getId());
+                        // intent.putExtra(HomeWorkActivity.EXTRA_SUBJECTNO, (int) mSubject.getId());
                         mContext.startActivity(intent);
 
 

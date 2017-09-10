@@ -19,6 +19,7 @@ import com.alia.sisdiary.R;
 import com.alia.sisdiary.model.ScheduledSubject;
 import com.alia.sisdiary.model.Subject;
 
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -27,45 +28,65 @@ import java.util.Date;
  */
 
 public class AddSubjectDialog extends DialogFragment {
+    private static final String ARG_NAME = "name";
+    private static final String ARG_TIME = "time";
     public static final String EXTRA_NAME =
             "com.alia.sisdiary.date.ui.fragment.NAME";
-    public static final String EXTRA_NUMBER =
-            "com.alia.sisdiary.date.ui.fragment.NUMBER";
     public static final String EXTRA_TIME =
             "com.alia.sisdiary.date.ui.fragment.TIME";
 
-
-    private EditText mNumberEditText;
     private EditText mNameEditText;
     private TimePicker mTimePicker;
 
+    public AddSubjectDialog() {
+
+    }
+
+    public static AddSubjectDialog newInstance(String name, Date time) {
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_NAME, name);
+        args.putSerializable(ARG_TIME, time);
+        AddSubjectDialog dialog = new AddSubjectDialog();
+        dialog.setArguments(args);
+        return dialog;
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
         View v = LayoutInflater.from(getActivity())
                 .inflate(R.layout.dialog_add_subject, null);
         mNameEditText = (EditText) v.findViewById(R.id.edit_name);
-        mNumberEditText = (EditText) v.findViewById(R.id.edit_number);
         mTimePicker = (TimePicker) v.findViewById(R.id.time_picker);
         mTimePicker.setIs24HourView(true);
 
+        if (getArguments() != null){
+            String name = (String) getArguments().getSerializable(ARG_NAME);
+            Date time = (Date) getArguments().getSerializable(ARG_TIME);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(time);
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int minute = calendar.get(Calendar.MINUTE);
+
+            mNameEditText.setText(name);
+            mTimePicker.setCurrentHour(hour);
+            mTimePicker.setCurrentMinute(minute);
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.dialog_tittle)
+        builder.setTitle(R.string.dialog_subject_tittle)
                 .setView(v)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         String name = mNameEditText.getText().toString();
-                        String number = mNumberEditText.getText().toString();
                         int[] time = new int[2];
                         time[0] = mTimePicker.getCurrentHour();
                         time[1] = mTimePicker.getCurrentMinute();
 
-                        if (name.trim().equals("") || number.trim().equals("")) {
-                            Toast.makeText(getActivity(), "Номер або назва не заповнені", Toast.LENGTH_SHORT).show();
+                        if (name.trim().equals("")) {
+                            Toast.makeText(getActivity(), "Поле не заповнено", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        sendResult(Activity.RESULT_OK, name, number, time);
+                        sendResult(Activity.RESULT_OK, name, time);
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -76,13 +97,12 @@ public class AddSubjectDialog extends DialogFragment {
         return builder.create();
     }
 
-    private void sendResult(int resultCode, String name, String number, int[] time) {
+    private void sendResult(int resultCode, String name, int[] time) {
         if (getTargetFragment() == null) {
             return;
         }
         Intent intent = new Intent();
         intent.putExtra(EXTRA_NAME, name);
-        intent.putExtra(EXTRA_NUMBER, number);
         intent.putExtra(EXTRA_TIME, time);
         getTargetFragment()
                 .onActivityResult(getTargetRequestCode(), resultCode, intent);

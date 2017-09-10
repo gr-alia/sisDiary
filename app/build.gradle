@@ -20,7 +20,7 @@ android {
     }
 }
 greendao{
-    schemaVersion 3
+    schemaVersion 6
     targetGenDir 'src/main/java'
 }
 dependencies {
