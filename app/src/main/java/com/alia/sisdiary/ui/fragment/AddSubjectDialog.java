@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,12 +32,13 @@ public class AddSubjectDialog extends DialogFragment {
     private static final String ARG_NAME = "name";
     private static final String ARG_TIME = "time";
     public static final String EXTRA_NAME =
-            "com.alia.sisdiary.date.ui.fragment.NAME";
+            "com.alia.sisdiary.ui.fragment.NAME";
     public static final String EXTRA_TIME =
-            "com.alia.sisdiary.date.ui.fragment.TIME";
+            "com.alia.sisdiary.ui.fragment.TIME";
 
     private EditText mNameEditText;
     private TimePicker mTimePicker;
+
 
     public AddSubjectDialog() {
 

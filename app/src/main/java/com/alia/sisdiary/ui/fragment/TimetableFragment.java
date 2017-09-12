@@ -4,6 +4,7 @@ import android.os.Bundle;;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,7 @@ import com.alia.sisdiary.ui.adapter.TimetableFragmentPagerAdapter;
 
 
 public class TimetableFragment extends Fragment {
-
+private static final String KEY_WEEKDAY = "weekdayNumber";
     private static final String TAG = "TimetableFragment";
 
     private TabLayout tabLayout;
@@ -29,13 +30,14 @@ public class TimetableFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState){
+
         View view = inflater.inflate(R.layout.fragment_timetable, container, false);
         getActivity().setTitle(R.string.menu_title_timetable);
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+
         viewPager.setAdapter(new TimetableFragmentPagerAdapter(getChildFragmentManager()));
 
         tabLayout = (TabLayout) view.findViewById(R.id.sliding_tabs);
@@ -43,5 +45,6 @@ public class TimetableFragment extends Fragment {
         tabLayout.setupWithViewPager(viewPager);
         return view;
     }
+
 
 }

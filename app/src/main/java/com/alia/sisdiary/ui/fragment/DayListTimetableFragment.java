@@ -77,6 +77,7 @@ public class DayListTimetableFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Bundle args = getArguments();
         weekdayNumber = args.getInt(ARG_NUM);
 
@@ -207,6 +208,4 @@ public class DayListTimetableFragment extends Fragment {
 
         }
     };
-
-
 }

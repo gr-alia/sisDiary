@@ -208,7 +208,8 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
                     } else {
 
                         Intent intent = new Intent(mContext, HomeWorkActivity.class);
-                        // intent.putExtra(HomeWorkActivity.EXTRA_SUBJECTNO, (int) mSubject.getId());
+                        intent.putExtra(HomeWorkActivity.EXTRA_NAME,mSubject.getSubject().getName());
+                        intent.putExtra(HomeWorkActivity.EXTRA_HOMEWORK, mSubject.getHomework());
                         mContext.startActivity(intent);
 
 

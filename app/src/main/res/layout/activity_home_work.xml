@@ -15,6 +15,7 @@
         android:layout_height="200dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:fitsSystemWindows="true"
+        android:id="@+id/app_bar"
         >
 
         <android.support.design.widget.CollapsingToolbarLayout
@@ -38,15 +39,7 @@
                 app:layout_collapseMode="parallax"
                 />
 
-            <TextView
-                android:id="@+id/subject_desc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="5 вересня, Пятниця, 08:30"
-                android:textColor="@android:color/black"
-                android:textSize="16sp"
-                android:textStyle="italic"/>
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/hw_toolbar"
                 android:layout_width="match_parent"
@@ -68,9 +61,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="Blabla Angl"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="18sp"
-        android:textStyle="italic"/>
+        android:text=""
+        android:textColor="@color/colorPenBlue"
+        android:textSize="20sp"
+        android:textStyle="italic"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginBottom="8dp"/>
     </android.support.v4.widget.NestedScrollView>
+    <TextView
+        android:id="@+id/subject_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text=""
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        app:layout_anchor="@id/app_bar"
+        android:layout_marginLeft="40dp"
+        app:layout_anchorGravity="bottom|start"/>
 </android.support.design.widget.CoordinatorLayout>

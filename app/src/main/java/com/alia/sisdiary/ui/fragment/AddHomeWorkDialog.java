@@ -23,7 +23,7 @@ import com.alia.sisdiary.model.ScheduledSubject;
 public class AddHomeWorkDialog extends DialogFragment {
     private static final String ARG_HOMEWORK = "homework";
     public static final String EXTRA_HOMEWORK =
-            "com.alia.sisdiary.date.ui.fragment.HOMEWORK";
+            "com.alia.sisdiary.ui.fragment.HOMEWORK";
 
     private EditText mHomeWork;
 

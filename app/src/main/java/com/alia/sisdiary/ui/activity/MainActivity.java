@@ -2,6 +2,7 @@ package com.alia.sisdiary.ui.activity;
 
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         setTitle(R.string.menu_title_timetable);
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 transaction.replace(R.id.content_frame, fragment);
                 transaction.commit();
 
-                if (mDrawer != null){
+                if (mDrawer != null) {
                     mDrawer.closeDrawer(GravityCompat.START);
                 }
                 return true;
