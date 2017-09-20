@@ -37,12 +37,17 @@ private static final String KEY_WEEKDAY = "weekdayNumber";
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
-
-        viewPager.setAdapter(new TimetableFragmentPagerAdapter(getChildFragmentManager()));
+TimetableFragmentPagerAdapter pagerAdapter = new TimetableFragmentPagerAdapter(getChildFragmentManager(), getContext());
+        viewPager.setAdapter(pagerAdapter);
 
         tabLayout = (TabLayout) view.findViewById(R.id.sliding_tabs);
         //connect TabLayout with ViewPager
         tabLayout.setupWithViewPager(viewPager);
+
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            tab.setCustomView(pagerAdapter.getTabView(i));
+        }
         return view;
     }
 

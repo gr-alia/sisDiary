@@ -1,9 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center"
+    android:paddingBottom="4dp">
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-          android:id="@+id/tab"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:gravity="center_horizontal"
-          android:textColor="#FFFFFF">
-</TextView>
+
+    <TextView
+        android:id="@+id/tab_weekday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:textAlignment="center"
+        android:textSize="@dimen/small_ts"
+        android:layout_margin="2dp"/>
+
+    <TextView
+        android:id="@+id/tab_number"
+        android:padding="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/main_ts"
+        android:background="@drawable/tab_selector"/>
+</LinearLayout>

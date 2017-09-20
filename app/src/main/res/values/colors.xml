@@ -5,6 +5,8 @@
     <color name="colorAccent">#09c6dc</color>
     <color name="colorBackground">#6ac2ce</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000</color>
+
     <color name="colorPenBlue">#2b2bb4</color>
     <color name="colorTintGrey">#b3b3c3</color>
     <color name="colorGold">#FDD50A</color>
