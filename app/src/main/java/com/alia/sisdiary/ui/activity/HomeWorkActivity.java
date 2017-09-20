@@ -45,13 +45,12 @@ public class HomeWorkActivity extends AppCompatActivity {
     public void onAddHomeWork(View view) {
         Toast toast = Toast.makeText(this, "Homework added", Toast.LENGTH_SHORT);
         toast.show();
-        // int subjectNO = (Integer) getIntent().getExtras().get(EXTRA_SUBJECTNO);
     }
 
     public void onDeleteHomeWork(View view) {
         Toast toast = Toast.makeText(this, "Homework deleted", Toast.LENGTH_SHORT);
         toast.show();
-        // int subjectNO = (Integer) getIntent().getExtras().get(EXTRA_SUBJECTNO);
+
     }
 
 }

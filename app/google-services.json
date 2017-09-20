@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "647435305273",
+    "project_id": "firebase-sisdiary"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:647435305273:android:0713abbe32ef569c",
+        "android_client_info": {
+          "package_name": "com.alia.sisdiary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "647435305273-vjsk08a3rnqjkkt0v0tf61clti41dvgf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alia.sisdiary",
+            "certificate_hash": "66824f89c1f623081d08de1059804f51286a1adc"
+          }
+        },
+        {
+          "client_id": "647435305273-lhljb66mb6u7qm31740vge2j26j9jm85.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7Sa-00RtmgpTNo8P2VrKhiYCfUaq-bkY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

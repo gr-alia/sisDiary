@@ -27,7 +27,6 @@ public class TimetableFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Log.i("Alyo", "getItem was launched");
         return DayListTimetableFragment.newInstance(position + 1);
     }
 

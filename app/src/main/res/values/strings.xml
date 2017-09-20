@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name" translatable="false">SisDiary</string>
+    <string name="app_name" translatable="false">Sis Diary</string>
+    <string name="facebook_app_id">263585040827329</string>
+
     <string name="child_name">Ім\'я</string>
     <string name="password">Пароль</string>
     <string name="title">UR sister\'s Diary</string>
@@ -27,6 +29,14 @@
 
     <string name="drawer_open">Опен</string>
     <string name="drawer_close">Клоуз</string>
+
+    <string name="action_exit">Вийти</string>
+    <string name="action_settings">Налаштування</string>
+
+    <string name="pref_user_data">com.alia.sisdiary.PREFERENCE_USER_DATA</string>
+    <string name="saved_user_id">com.alia.sisdiary.SAVED_USER_ID</string>
+    <string name="saved_user_photourl">com.alia.sisdiary.SAVED_USER_PHOTOURL</string>
+    <string name="saved_user_name">com.alia.sisdiary.SAVED_USER_NAME</string>
 
 
 

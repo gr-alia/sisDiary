@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.drm.DrmStore;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
@@ -128,6 +129,8 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
     class SubjectHolder extends RecyclerView.ViewHolder {
 
         private LinearLayout mSubjectItem;
+        private LinearLayout mTimeUnit;
+        private LinearLayout mNameUnit;
         private TextView mNumberTextView;
         private TextView mTimeTextView;
         private TextView mNameTextView;
@@ -139,6 +142,8 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
             super(itemView);
             mSubjectItem = (LinearLayout)
                     itemView.findViewById(R.id.subject_item);
+            mTimeUnit = (LinearLayout) itemView.findViewById(R.id.time_unit);
+            mNameUnit = (LinearLayout) itemView.findViewById(R.id.name_unit);
             mNameTextView = (TextView)
                     itemView.findViewById(R.id.list_item_subject_name);
             mNumberTextView = (TextView)
@@ -154,16 +159,21 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
             if (multiSelect) {
                 if (selectedItems.contains(item)) {
                     selectedItems.remove(item);
-                    mSubjectItem.setBackgroundColor(Color.WHITE);
+                   // mSubjectItem.setBackgroundColor(Color.WHITE);
+                    mTimeUnit.setBackgroundColor(Color.parseColor("#8a6fae"));
+                    mNameUnit.setBackgroundColor(Color.WHITE);
+
                 } else {
                     selectedItems.add(item);
-                    mSubjectItem.setBackgroundColor(Color.LTGRAY);
+                  //  mSubjectItem.setBackgroundColor(Color.LTGRAY);
+                    mTimeUnit.setBackgroundColor(Color.parseColor("#b3b3c3"));
+                    mNameUnit.setBackgroundColor(Color.parseColor("#b3b3c3"));
+
                 }
                 if (selectedItems.size() == 1) {
                     isAddHwButton = true;
                     mActionMode.invalidate();
-                }
-                else {
+                } else {
                     isAddHwButton = false;
                     mActionMode.invalidate();
                 }
@@ -183,9 +193,11 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
             mTimeTextView.setText(simpleDateFormat.format(subject.getLessonTime()));
 
             if (selectedItems.contains(subject)) {
-                mSubjectItem.setBackgroundColor(Color.LTGRAY);
+                mTimeUnit.setBackgroundColor(Color.parseColor("#b3b3c3"));
+                mNameUnit.setBackgroundColor(Color.parseColor("#b3b3c3"));
             } else {
-                mSubjectItem.setBackgroundColor(Color.WHITE);
+                mTimeUnit.setBackgroundColor(Color.parseColor("#8a6fae"));
+                mNameUnit.setBackgroundColor(Color.WHITE);
             }
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -208,7 +220,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectH
                     } else {
 
                         Intent intent = new Intent(mContext, HomeWorkActivity.class);
-                        intent.putExtra(HomeWorkActivity.EXTRA_NAME,mSubject.getSubject().getName());
+                        intent.putExtra(HomeWorkActivity.EXTRA_NAME, mSubject.getSubject().getName());
                         intent.putExtra(HomeWorkActivity.EXTRA_HOMEWORK, mSubject.getHomework());
                         mContext.startActivity(intent);
 
