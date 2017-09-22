@@ -27,8 +27,8 @@
     <string name="cab_edit_lesson">Редагувати урок</string>
 
 
-    <string name="drawer_open">Опен</string>
-    <string name="drawer_close">Клоуз</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
 
     <string name="action_exit">Вийти</string>
     <string name="action_settings">Налаштування</string>

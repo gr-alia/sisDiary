@@ -22,5 +22,15 @@
         android:textSize="24sp"
         tools:ignore="MissingPrefix"/>
 
+    <Button
+        android:id="@+id/button"
+        style="@style/EntranceButton"
+        android:layout_width="270dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:onClick="onGo"
+        android:text="@string/enter_button"
+        android:layout_margin="10dp"/>
+
 
 </LinearLayout>

@@ -30,12 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final int REQUEST_GOOGLE_LOGIN = 9001;
 
     private SignInButton googleLoginButton;
-
     private static GoogleApiClient mGoogleApiClient;
-
-    public static GoogleApiClient getmGoogleApiClient() {
-        return mGoogleApiClient;
-    }
 
     private SharedPreferences mSpUserData;
 
@@ -47,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         setupViews();
-        googleLogIn();
+        googlePrepare();
         googleLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,7 +60,6 @@ public class LoginActivity extends AppCompatActivity {
         if (requestCode == REQUEST_GOOGLE_LOGIN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
-
         }
     }
 
@@ -74,9 +68,8 @@ public class LoginActivity extends AppCompatActivity {
         googleLoginButton.setSize(SignInButton.SIZE_WIDE);
     }
 
-    private void googleLogIn() {
+    private void googlePrepare() {
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
                 .build();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
@@ -105,8 +98,8 @@ public class LoginActivity extends AppCompatActivity {
             editor.putString(getString(R.string.saved_user_photourl), photoUrl);
             editor.putString(getString(R.string.saved_user_name), userName);
             editor.commit();
-            Intent intentMain = new Intent(this, MainActivity.class);
-            startActivity(intentMain);
+            finish();
+
         } else {
             // Signed out, show unauthenticated UI.
             Toast.makeText(this, "Failed", Toast.LENGTH_SHORT);
@@ -114,12 +107,6 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public void onComeIn(View view) {
-        Log.i(TAG, "Launch click ComeIN");
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-
-    }
 
     @Override
     public void onBackPressed() {
@@ -127,6 +114,5 @@ public class LoginActivity extends AppCompatActivity {
         // disable going back to the MainActivity
         moveTaskToBack(true);
     }
-
 
 }
