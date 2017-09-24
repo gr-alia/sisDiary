@@ -19,9 +19,10 @@
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="EntranceButton" parent="AppTheme">
-        <item name="android:background">@drawable/rounded_button</item>
+        <item name="android:background">@drawable/entrance_button</item>
         <item name="android:textStyle"></item>
         <item name="android:textSize">@dimen/entrance_button_text_size</item>
-        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textColor">@color/colorGrey</item>
+
     </style>
 </resources>

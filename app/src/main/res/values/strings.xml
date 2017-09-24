@@ -37,7 +37,10 @@
     <string name="saved_user_id">com.alia.sisdiary.SAVED_USER_ID</string>
     <string name="saved_user_photourl">com.alia.sisdiary.SAVED_USER_PHOTOURL</string>
     <string name="saved_user_name">com.alia.sisdiary.SAVED_USER_NAME</string>
+    <string name="saved_login_type">com.alia.sisdiary.SAVED_LOGIN_TYPE</string>
 
+    <string name="login_type_google">com.alia.sisdiary.LOGIN_TYPE_GOOGLE</string>
+    <string name="login_type_facebook">com.alia.sisdiary.LOGIN_TYPE_FACEBOOK</string>
 
 
 </resources>

@@ -31,6 +31,7 @@ import com.alia.sisdiary.ui.fragment.AddSubjectDialog;
 import com.alia.sisdiary.ui.fragment.DayListTimetableFragment;
 import com.alia.sisdiary.ui.fragment.NotesFragment;
 import com.alia.sisdiary.ui.fragment.TimetableFragment;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
@@ -61,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences.OnSharedPreferenceChangeListener mOnSpChangedListener;
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,8 +72,7 @@ public class MainActivity extends AppCompatActivity {
         boolean isContainsSP = mSpUserData.contains(getString(R.string.saved_user_id));
         if (!isContainsSP) {
             login();
-        }
-        else {
+        } else {
             showUserData();
         }
         mOnSpChangedListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
@@ -187,26 +186,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void signOut() {
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        Toast.makeText(getBaseContext(), "This is Log Out, Baby!", Toast.LENGTH_LONG).show();
-                        mSpUserData.edit().clear().commit();
-                        login();
-                    }
-                });
+        String loginType = mSpUserData.getString(getString(R.string.saved_login_type), null);
+        if (loginType.equals(getString(R.string.login_type_google))) {
+            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                    new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(Status status) {
+                            mSpUserData.edit().clear().commit();
+                            login();
+                        }
+                    });
+        } else if (loginType.equals(getString(R.string.login_type_facebook))) {
+            LoginManager.getInstance().logOut();
+            mSpUserData.edit().clear().commit();
+            login();
 
-    }
-
-    @Override
-    public void onBackPressed() {
-        moveTaskToBack(true);
-        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
-            mDrawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
         }
     }
 
-}
+        @Override
+        public void onBackPressed () {
+            moveTaskToBack(true);
+            if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+                mDrawer.closeDrawer(GravityCompat.START);
+            } else {
+                super.onBackPressed();
+            }
+        }
+
+    }

@@ -10,10 +10,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alia.sisdiary.R;
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -25,12 +32,18 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_GOOGLE_LOGIN = 9001;
 
     private SignInButton googleLoginButton;
+    private LoginButton fbLoginButton;
+    private TextView mErrorView;
     private static GoogleApiClient mGoogleApiClient;
+    private CallbackManager mCallbackManager;
 
     private SharedPreferences mSpUserData;
 
@@ -50,22 +63,48 @@ public class LoginActivity extends AppCompatActivity {
                 startActivityForResult(signInIntent, REQUEST_GOOGLE_LOGIN);
             }
         });
+        mCallbackManager = CallbackManager.Factory.create();
+        fbLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                String userId = loginResult.getAccessToken().getUserId();
+                AccessToken accessToken = loginResult.getAccessToken();
+                handleFbResult(accessToken);
+
+            }
+
+            @Override
+            public void onCancel() {
+                mErrorView.setText("Log In was canceled");
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                mErrorView.setText("Log in error" + String.valueOf(error));
+            }
+        });
+
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == REQUEST_GOOGLE_LOGIN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
         }
+        //For FB login
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     private void setupViews() {
         googleLoginButton = (SignInButton) findViewById(R.id.google_login_button);
         googleLoginButton.setSize(SignInButton.SIZE_WIDE);
+        fbLoginButton = (LoginButton) findViewById(R.id.fb_login_button);
+        mErrorView = (TextView) findViewById(R.id.error_view);
+
     }
 
     private void googlePrepare() {
@@ -94,6 +133,7 @@ public class LoginActivity extends AppCompatActivity {
             mSpUserData = getSharedPreferences(
                     getString(R.string.pref_user_data), MODE_PRIVATE);
             SharedPreferences.Editor editor = mSpUserData.edit();
+            editor.putString(getString(R.string.saved_login_type), getString(R.string.login_type_google));
             editor.putString(getString(R.string.saved_user_id), userId);
             editor.putString(getString(R.string.saved_user_photourl), photoUrl);
             editor.putString(getString(R.string.saved_user_name), userName);
@@ -102,9 +142,52 @@ public class LoginActivity extends AppCompatActivity {
 
         } else {
             // Signed out, show unauthenticated UI.
-            Toast.makeText(this, "Failed", Toast.LENGTH_SHORT);
+            Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    private void handleFbResult(AccessToken accessToken) {
+        GraphRequest request = GraphRequest.newMeRequest(
+                accessToken,
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(
+                            JSONObject object,
+                            GraphResponse response) {
+                        if (response.getError() == null) {
+                            String userId = null;
+                            String userName = null;
+                            String photoUrl = null;
+                            try {
+                                userId = object.getString("id");
+                                photoUrl = object.getJSONObject("picture").getJSONObject("data").getString("url");
+                                userName = object.getString("name");
+                                Log.i(TAG, userId + userName + photoUrl);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            mSpUserData = getSharedPreferences(
+                                    getString(R.string.pref_user_data), MODE_PRIVATE);
+                            SharedPreferences.Editor editor = mSpUserData.edit();
+                            editor.putString(getString(R.string.saved_login_type), getString(R.string.login_type_facebook));
+                            editor.putString(getString(R.string.saved_user_id), userId);
+                            editor.putString(getString(R.string.saved_user_photourl), photoUrl);
+                            editor.putString(getString(R.string.saved_user_name), userName);
+                            editor.commit();
+                            finish();
+                        }
+                        else {
+                            String errorMessage = response.getError().getErrorMessage();
+                            Toast.makeText(getBaseContext(), "Failed because of: " + errorMessage, Toast.LENGTH_SHORT);
+
+                        }
+                    }
+                });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields","id,name,picture");
+        request.setParameters(parameters);
+        request.executeAsync();
     }
 
 
